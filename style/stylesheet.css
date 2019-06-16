@@ -1,0 +1,80 @@
+.column {
+	float: left;
+	width: 50%;
+	/* for fitting into page: */
+	padding: 5% 0 5% 0;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* setting the buttons layout */
+.btn-group button {
+  background-color: rgb(2, 200, 259); /*rgb(80, 177, 198); /* Green background */
+  border: 1px solid black; /* Green border */
+  color: white; /* White text */
+  padding: 10px 24px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  width: 100%; /* Set a width if needed */
+  display: block; /* Make the buttons appear below each other */
+}
+.btn-group button:not(:last-child) {
+  border-bottom: none; /* Prevent double borders */
+}
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: rgb(2, 182, 236); /*rgb(85, 187, 210); /**/
+}
+/* setting the "cuprins" div */
+.btn-group div#cuprins {
+    text-align: center;
+	padding-top: 10px;
+	height: 36px;
+	border: 1px solid black; /* Green border */
+	border-bottom: none;
+}
+/* setting the left side: */
+.column:not(:last-child) {
+	width: 40%;
+	padding-left: 5%;
+	padding-right: 5%;
+}
+.column h2 {
+	text-align: center;
+	
+}
+.column audio {
+	width: 100%;
+	
+}
+/*.btn-group div#cuprins:after {
+    content: "";
+	height: 5px;
+}*/
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+
+
+
+/* for two inequal width columns: 
+.column {
+  float: left;
+}
+
+.left {
+  width: 25%;
+}
+
+.right {
+  width: 75%;
+}
+*/

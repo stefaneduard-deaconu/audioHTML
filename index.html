@@ -1,0 +1,36 @@
+<html>
+
+<head>
+	<title>
+		Dictionar audio
+	</title>
+	<link rel="stylesheet" type="text/css" href="./style/stylesheet.css"
+</head>
+
+<body>
+	<div class="row">
+		<div class="column">
+			<h2>
+				Education
+			</h2>
+			<audio controls id="audio_player">
+				<source src="./audio/education.wav" type="audio/wav">
+			</audio>
+		</div>
+		<div class="column">
+			<div class="btn-group">
+				<div id="cuprins"> Cuprins </div>
+				<button onclick="set(1)"> Animals </button>
+				<button onclick="set(2)"> Birds </button>
+				<button onclick="set(3)"> Clothing </button>
+				<button onclick="set(4)"> Car </button>
+				<button onclick="set(5)"> Diseases </button>
+				<button onclick="set(6)"> Education </button>
+			</div>
+		</div>
+	</div>
+	
+	<script src="./script/script.js"></script>
+</body>
+
+</html>
