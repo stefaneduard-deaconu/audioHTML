@@ -4,7 +4,19 @@ var options = [
 		"_ride",
 		"_rock"
 		]
-var labels = { }
+var labels = { };
+
+window.onload = function() {
+	var btnGroup = document.getElementsByClassName('btn-group')[0];
+	btnGroup.scrollBy(0, 4 * 45 + 1);
+	/*for (var i = 0; i < btns.length; i++) {
+		if (btns[i].innerHTML.search('Education') != -1)
+			btns[i].scrollIntoView(true);
+		/*if (btn.innerHTML.contains('Education')) {
+			btn.style.borderStyle = 'inset';
+		}
+	}*/
+}
 
 // we use this next function to create labels for each file
 // but we will create labels as they become necessary
@@ -18,13 +30,20 @@ function toLabel(string) {
 	}
 
 function set(option) { // option is a string, that stores the name of the audio file
-	console.log(labels[option]); //
 	if (labels[option] == undefined)
 		labels[option] = toLabel(option);
-	console.log(labels[option]);
 	//
-	document.getElementsByTagName("h2")[0].innerHTML = labels[option];
-	document.getElementsByTagName("source")[0].src = `./audio/${option}.wav`;
-	var player = document.getElementById("audio_player");
+	document.getElementsByTagName('h2')[0].innerHTML = labels[option];
+	document.getElementsByTagName('source')[0].src = `./audio/${option}.wav`;
+	var player = document.getElementById('audio_player');
 	player.load();
 }
+
+
+var vueObj = new Vue({
+	el: "#vueObj",
+	data: {
+		btnLabels : options
+		}
+});
+/**/
