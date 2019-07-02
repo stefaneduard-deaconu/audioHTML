@@ -18,17 +18,20 @@
 			</audio>
 		</div>
 		<div class="column">
-			<div class="btn-group">
+			<div class="btn-group" id="vueObj">
 				<div id="cuprins"> Sounds and likes </div>
 				<button onclick="set('_industrial')"> Industrial Beat </button>
 				<button onclick="set('_oildrum')"> Oil Drums </button>
 				<button onclick="set('_ride')"> Ride Patterns </button>
 				<button onclick="set('_rock')"> Rock Sounds </button>
+				<button v-for="label in btnLabels"> {{ label }} </button> <!-- logically, these must be rendered after the scripts are added -->
 			</div>
 		</div>
 	</div>
-	
+	<!-- for performance, I will make a script separated for Vue objects and the conex -->
+	<script src="./script/vue.js"></script>
 	<script src="./script/script.js"></script>
+	
 </body>
 
 </html>
