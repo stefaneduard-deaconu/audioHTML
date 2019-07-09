@@ -29,6 +29,7 @@ function toLabel(string) {
 		return firstLetterToUpper + remainder;
 	}
 
+
 function set(option) { // option is a string, that stores the name of the audio file
 	if (labels[option] == undefined)
 		labels[option] = toLabel(option);
@@ -44,6 +45,14 @@ var vueObj = new Vue({
 	el: "#vueObj",
 	data: {
 		btnLabels : options
+		}
+});
+
+var startup_audio = "_industrial";
+var audioLabel = new Vue({
+	el: "#audio_label",
+	data: {
+		label: toLabel(startup_audio)
 		}
 });
 /**/
