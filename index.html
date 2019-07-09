@@ -26,7 +26,7 @@
 				<button onclick="set('_rock')"> Rock Sounds </button>
 				<button v-for="label in btnLabels"> {{ label }} </button> <!-- logically, these must be rendered after the scripts are added -->
 				<button v-for="label in btnLabels"> {{ label }} </button>
-				<!-- <button v-for="label in btnLabels"> {{ label }} </button> -->
+				<button v-for="label in btnLabels"> {{ label }} </button>
 
 			</div>
 		</div>
@@ -38,9 +38,16 @@
 		let buttonCount = document.getElementsByTagName("button").length;
 		let buttonHeight = 36; // hoist this as a global argument later (**1)
 		console.log(buttonCount)
-		console.log(42 + buttonHeight * buttonCount);
+		console.log(42 + buttonHeight * buttonCount + 1); // one last pxm for the bottom border of the .btn-group div
+		let btnTotalHeight = 42 + buttonHeight * buttonCount + 1;
+		let btnClientHeight = document.getElementById('vueObj').clientHeightl
 		console.log(document.getElementById('vueObj').clientHeight);
-		// if (buttonCount * 45 > )
+		if (btnTotalHeight > btnClientHeight) {
+			// add the corresponding class to the .btn-group div
+		}
+		else {
+			// add the corresponding class to the .btn-group div
+		}
 
 	</script>
 
