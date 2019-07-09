@@ -8,6 +8,7 @@ var labels = { };
 
 window.onload = function() {
 	var btnGroup = document.getElementsByClassName('btn-group')[0];
+	// TODO: here we can do a function to find a certain element on which to fucus (*1)
 	btnGroup.scrollBy(0, 4 * 45 + 1);
 	/*for (var i = 0; i < btns.length; i++) {
 		if (btns[i].innerHTML.search('Education') != -1)
@@ -48,6 +49,7 @@ var vueObj = new Vue({
 		}
 });
 
+// (*1) this should correspond with the focused element :)
 var startup_audio = "_industrial";
 var audioLabel = new Vue({
 	el: "#audio_label",
