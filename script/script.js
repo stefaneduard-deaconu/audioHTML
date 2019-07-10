@@ -41,11 +41,52 @@ function set(option) { // option is a string, that stores the name of the audio 
 	player.load();
 }
 
+// we follow a model:
+//   we won't have two identical named files with different labels !
+var filenames = [
+	"_industrial",
+	"_oildrum",
+	'_ride',
+	'_rock',
+	"_industrial",
+	"_oildrum",
+	'_ride',
+	"_industrial",
+	"_oildrum",
+	'_ride',
+	"_industrial",
+	"_oildrum",
+	'_ride',
+	"_industrial",
+	"_oildrum",
+	'_ride',
+]
+// next we say that some audios must have less-defaulty labels
+var labels = {
+	"_industrial": 'Industrial Beats'
+}
+var btns = [ ]
+function generateButtons(filenames, labels) {
+	// we create teh btn's, by using the labels as the explicit ones
+	//   and using undefined for the default ones
+	for (var i = 0; i < filenames.length; i++)
+		btns.push({
+			filename: filenames[i],
+			label: labels[filenames[i]]
+		});
+	// now we set the default labels for the remaining buttons
+	btns.forEach((btn) => {
+		console.log(btn.filename)
+		if (btn.label == undefined)
+			btn.label = toLabel(btn.filename);
+	});
+}
+generateButtons(filenames, labels);
 
-var vueObj = new Vue({
-	el: "#vueObj",
+var buttons = new Vue({
+	el: "#buttons",
 	data: {
-		btnLabels : options
+		btns: btns
 		}
 });
 

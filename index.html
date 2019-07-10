@@ -18,15 +18,10 @@
 			</audio>
 		</div>
 		<div class="right">
-			<div class="btn-group" id="vueObj">
+			<div class="btn-group" id="buttons">
 				<div id="contents"> Sounds and likes </div>
-				<button onclick="set('_industrial')"> Industrial Beat </button>
-				<button onclick="set('_oildrum')"> Oil Drums </button>
-				<button onclick="set('_ride')"> Ride Patterns </button>
-				<button onclick="set('_rock')"> Rock Sounds </button>
-				<button v-for="label in btnLabels"> {{ label }} </button> <!-- logically, these must be rendered after the scripts are added -->
-				<button v-for="label in btnLabels"> {{ label }} </button>
-				<button v-for="label in btnLabels"> {{ label }} </button>
+				<button v-for="btn in btns"> {{ btn.label }}, {{btn.filename}} </button> <!-- logically, these must be rendered after the scripts are added -->
+
 
 			</div>
 		</div>
@@ -40,8 +35,8 @@
 		console.log(buttonCount)
 		console.log(42 + buttonHeight * buttonCount + 1); // one last pxm for the bottom border of the .btn-group div
 		let btnTotalHeight = 42 + buttonHeight * buttonCount + 1;
-		let btnClientHeight = document.getElementById('vueObj').clientHeightl
-		console.log(document.getElementById('vueObj').clientHeight);
+		let btnClientHeight = document.getElementById('buttons').clientHeightl
+		console.log(document.getElementById('buttons').clientHeight);
 		if (btnTotalHeight > btnClientHeight) {
 			// add the corresponding class to the .btn-group div
 		}
