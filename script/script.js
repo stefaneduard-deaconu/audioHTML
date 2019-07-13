@@ -76,9 +76,10 @@ function generateButtons(filenames, labels) {
 		});
 	// now we set the default labels for the remaining buttons
 	btns.forEach((btn) => {
-		console.log(btn.filename)
-		if (btn.label == undefined)
+		if (btn.label == undefined) {
 			btn.label = toLabel(btn.filename);
+			labels[btn.filename] = btn.label;
+		}
 	});
 }
 generateButtons(filenames, labels);
@@ -90,12 +91,34 @@ var buttons = new Vue({
 		}
 });
 
+/*
+ * after generating the buttons, we choose the first one to be loaded
+ *   as default,
+ */
 // (*1) this should correspond with the focused element :)
 var startup_audio = "_industrial";
-var audioLabel = new Vue({
+var startup_label = new Vue({
 	el: "#audio_label",
 	data: {
-		label: toLabel(startup_audio)
+		label: labels[startup_audio]
 		}
 });
-/**/
+
+/*
+ * and now we add functionality to the buttons :)
+ */
+ // TODO  also try a var btn of buttons variante :)
+//
+// (!) this section must be modified if you upload multiple audio formats (such as .wav, .mp3, .ogg)
+var audioSource = document.querySelector('audio source');
+var audioLabel = document.getElementById('audio_label');
+function loadAudio(index) {
+	// (!) this section must be modified if you upload multiple audio formats (such as .wav, .mp3, .ogg)
+	audioSource.src = './audio/' + filenames[index] + '.wav';
+	audioLabel.innerHTML = labels[filenames[index]];
+}
+//
+buttons = document.getElementsByTagName('button');
+for(let i = 0; i < buttons.length; i++) {
+	buttons[i].setAttribute('onclick', `loadAudio(${i})`);
+}
