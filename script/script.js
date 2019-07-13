@@ -1,24 +1,3 @@
-var options = [
-		"_industrial",
-		"_oildrum",
-		"_ride",
-		"_rock"
-		]
-var labels = { };
-
-window.onload = function() {
-	var btnGroup = document.getElementsByClassName('btn-group')[0];
-	// TODO: here we can do a function to find a certain element on which to fucus (*1)
-	btnGroup.scrollBy(0, 4 * 45 + 1);
-	/*for (var i = 0; i < btns.length; i++) {
-		if (btns[i].innerHTML.search('Education') != -1)
-			btns[i].scrollIntoView(true);
-		/*if (btn.innerHTML.contains('Education')) {
-			btn.style.borderStyle = 'inset';
-		}
-	}*/
-}
-
 // we use this next function to create labels for each file
 // but we will create labels as they become necessary
 function toLabel(string) {
@@ -44,26 +23,31 @@ function set(option) { // option is a string, that stores the name of the audio 
 // we follow a model:
 //   we won't have two identical named files with different labels !
 var filenames = [
-	"_industrial",
-	"_oildrum",
+	'_industrial',
+	'_oildrum',
 	'_ride',
 	'_rock',
-	"_industrial",
-	"_oildrum",
+	'_industrial',
+	'_oildrum',
 	'_ride',
-	"_industrial",
-	"_oildrum",
 	'_ride',
-	"_industrial",
-	"_oildrum",
+	'_industrial',
+	'_oildrum',
 	'_ride',
-	"_industrial",
-	"_oildrum",
+	'_industrial',
+	'_oildrum','_industrial',
+	'_oildrum',
+	'_ride',
+	'_industrial',
+	'_oildrum',
+	'_ride',
+	'_industrial',
+	'_oildrum',
 	'_ride',
 ]
 // next we say that some audios must have less-defaulty labels
 var labels = {
-	"_industrial": 'Industrial Beats'
+	'_industrial': 'Industrial Beats'
 }
 var btns = [ ]
 function generateButtons(filenames, labels) {
@@ -85,7 +69,7 @@ function generateButtons(filenames, labels) {
 generateButtons(filenames, labels);
 
 var buttons = new Vue({
-	el: "#buttons",
+	el: '#buttons',
 	data: {
 		btns: btns
 		}
@@ -96,9 +80,9 @@ var buttons = new Vue({
  *   as default,
  */
 // (*1) this should correspond with the focused element :)
-var startup_audio = "_industrial";
+var startup_audio = '_industrial';
 var startup_label = new Vue({
-	el: "#audio_label",
+	el: '#audio_label',
 	data: {
 		label: labels[startup_audio]
 		}
@@ -122,3 +106,12 @@ buttons = document.getElementsByTagName('button');
 for(let i = 0; i < buttons.length; i++) {
 	buttons[i].setAttribute('onclick', `loadAudio(${i})`);
 }
+
+
+// final script, they might just be about styling :D
+function postScriptum(buttonsToScroll) {
+	var btnGroup = document.getElementsByClassName('btn-group')[0];
+	// TODO: here we can do a function to find a certain element on which to fucus (*1)
+	btnGroup.scrollBy(0, (buttonsToScroll - 1) * 36 + 1);
+}
+postScriptum(3); // we get into sight, and highlight (TODO), the fourth element
