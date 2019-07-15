@@ -107,6 +107,7 @@ var startup_label = new Vue({
         label: labels[startup_audio]
     }
 });
+set('_industrial');
 
 /*
  * and now we add functionality to the buttons :)
