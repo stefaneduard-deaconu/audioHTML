@@ -15,7 +15,7 @@ function set(option) { // option is a string, that stores the name of the audio 
         labels[option] = toLabel(option);
     //
     document.getElementsByTagName('h2')[0].innerHTML = labels[option];
-    document.getElementsByTagName('source')[0].src = `./audio/${option}.wav`;
+    document.getElementsByTagName('source')[0].src = audio_src_url + `${option}.wav`;
     var player = document.getElementById('audio_player');
     player.load();
 }
@@ -26,6 +26,9 @@ function set(option) { // option is a string, that stores the name of the audio 
 // generating a selection of buttonCount buttons, and of labelCount implicit labels:
 var filenames = [ ]
 var labels = { }
+// settings:
+audio_src_url = 'https://raw.githubusercontent.com/stefaneduard-deaconu/audioHTML/gh-pages/audio/'
+
 
 function generateButtonContent(btnCount, lblCount) {
 	// it is no problem if there are more labels than button :)
@@ -115,7 +118,7 @@ var audioLabel = document.getElementById('audio_label');
 
 function loadAudio(index) {
     // (!) this section must be modified if you upload multiple audio formats (such as .wav, .mp3, .ogg)
-    audioTag.children[0].src = './audio/' + filenames[index] + '.wav';
+    audioTag.children[0].src = audio_src_url + filenames[index] + '.wav';
 	audioTag.load();
     audioLabel.innerHTML = labels[filenames[index]];
 }
