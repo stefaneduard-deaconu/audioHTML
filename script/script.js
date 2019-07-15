@@ -9,7 +9,9 @@ function toLabel(string) {
     return firstLetterToUpper + remainder;
 }
 
-
+// settings:
+audio_src_url = 'https://raw.githubusercontent.com/stefaneduard-deaconu/audioHTML/gh-pages/audio/'
+//
 function set(option) { // option is a string, that stores the name of the audio file
     if (labels[option] == undefined)
         labels[option] = toLabel(option);
@@ -26,8 +28,7 @@ function set(option) { // option is a string, that stores the name of the audio 
 // generating a selection of buttonCount buttons, and of labelCount implicit labels:
 var filenames = [ ]
 var labels = { }
-// settings:
-audio_src_url = 'https://raw.githubusercontent.com/stefaneduard-deaconu/audioHTML/gh-pages/audio/'
+
 
 
 function generateButtonContent(btnCount, lblCount) {
