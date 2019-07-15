@@ -110,12 +110,13 @@ var startup_label = new Vue({
 // TODO  also try a var btn of buttons variante :)
 //
 // (!) this section must be modified if you upload multiple audio formats (such as .wav, .mp3, .ogg)
-var audioSource = document.querySelector('audio source');
+var audioTag = document.querySelector('audio');
 var audioLabel = document.getElementById('audio_label');
 
 function loadAudio(index) {
     // (!) this section must be modified if you upload multiple audio formats (such as .wav, .mp3, .ogg)
-    audioSource.src = './audio/' + filenames[index] + '.wav';
+    audioTag.children[0].src = './audio/' + filenames[index] + '.wav';
+	audioTag.load();
     audioLabel.innerHTML = labels[filenames[index]];
 }
 //
