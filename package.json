@@ -1,27 +1,31 @@
 {
-  "name": "audiodictionary",
-  "version": "1.0.0",
-  "description": "Un dictionar audio pe categorii diverse de cuvinte",
-  "main": "main.js",
-  "dependencies": {},
-  "devDependencies": {
-    "electron": "^5.0.6",
-    "electron-builder": "^21.1.5"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder --ia32 --x64",
-    "postinstall": "electron-builder install-app-deps"
-  },
-  "build": {
-    "appId": "categdictionary",
-    "win": {
-      "target": "msi",
-      "icon": "build/icon.ico"
-    }
-  },
-  "author": "stefaneduard-deaconu",
-  "license": "ISC"
+    "name": "AudioDictionary",
+    "version": "1.0.0",
+    "description": "Un dictionar audio pe categorii diverse de cuvinte",
+    "main": "main.js",
+    "dependencies": {},
+    "devDependencies": {
+        "electron": "^5.0.10",
+        "electron-builder": "^21.2.0"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "electron .",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder --ia32 --x64",
+        "postinstall": "electron-builder install-app-deps"
+    },
+    "build": {
+        "appId": "audiodictionary",
+        "win": {
+            "target": "msi",
+            "icon": "build/icon.ico"
+        }
+    },
+    "author": {
+        "name": "Stefan-Eduard Deaconu",
+        "email": "stefaneduard.deaconu@gmail.com",
+        "url": "https://stefaneduard-deaconu.github.io"
+    },
+    "license": "ISC"
 }
