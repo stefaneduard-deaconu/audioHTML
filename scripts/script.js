@@ -100,39 +100,20 @@ var labels = {
 	'weather': 'Weather'
 };
 
-//   for testin':
-// console.log(filenames);
-// console.log(labels);
-// // You can easily, for testing, define your own labels here:
-// var labels = {
-//     '_industrial': 'Industrial Beats'
-// }
-
 var btns = []
 
 
-// we use this next function to create labels for each file
-// but we will create labels as they become necessary
 function toLabel(string) {
-    string = string.replace('_', ' ')
-        .trim();
+	// replace replaces only the first occurence, for some reason :)()(
+    split_string = string.split('_');
+	// the next line make overleaping whitespaces collapse into one
+	string = split_string.join(' ');
+    string = string.trim();
     firstLetterToUpper = string.substr(0, 1) // getting the first letter
         .toUpperCase(); // making it uppercase
     remainder = string.substr(1); // getting the remainder of the string
     return firstLetterToUpper + remainder;
 }
-
-
-function set(option) { // option is a string, that stores the name of the audio file
-    if (labels[option] == undefined)
-        labels[option] = toLabel(option);
-    //
-    document.getElementsByTagName('h2')[0].innerHTML = labels[option];
-    document.getElementsByTagName('source')[0].src = `./audio/${option}.wav`;
-    var player = document.getElementById('audio_player');
-    player.load();
-}
-
 
 function generateButtons(filenames, labels) {
     // we create teh btn's, by using the labels as the explicit ones
@@ -152,6 +133,7 @@ function generateButtons(filenames, labels) {
 }
 generateButtons(filenames, labels);
 
+
 var buttons = new Vue({
     el: '#buttons',
     data: {
@@ -159,18 +141,21 @@ var buttons = new Vue({
     }
 });
 
+
 /*
  * after generating the buttons, we choose the first one to be loaded
  *   as default,
  */
 // (*1) this should correspond with the focused element :)
-var startup_audio = '_industrial';
+// TODO  create a variable for the current playing file. create the events and matching classes necessary to add interactivity
+var startup_audio = 'bathroom'; // this is the choice
 var startup_label = new Vue({
     el: '#audio_label',
     data: {
         label: labels[startup_audio]
     }
 });
+
 
 /*
  * and now we add functionality to the buttons :)
