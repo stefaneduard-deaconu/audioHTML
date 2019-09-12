@@ -27,35 +27,6 @@ function set(option) { // option is a string, that stores the name of the audio 
 var filenames = [ ]
 var labels = { }
 
-function generateButtonContent(btnCount, lblCount) {
-	// it is no problem if there are more labels than button :)
-	possibleFilenames = [
-		'_industrial',
-		'_oildrum',
-		'_ride',
-		'_rock',
-	]
-	// it could be better if generating random stuff using the words, but that isn't important
-	possibleLabels = [
-		['_industrial', 'Industrialized world music'],
-		['_oildrum', 'Oilly drum'],
-		['_ride', 'Ride for music'],
-		['_rock', 'Rocks and sticks..']
-	]
-	// generate integers between 0 and 3
-	for(let i = 0; i < btnCount; i++) {
-        value = parseInt(Math.random() * 4);
-		console.log(value);
-        filenames.push(possibleFilenames[value]);
-    }
-    for(let i = 0; i < lblCount; i++) {
-        value = parseInt(Math.random() * 4);
-		console.log(value);
-        labels[`${possibleLabels[value][0]}`] = possibleLabels[value][1]
-    }
-}
-generateButtonContent(16, 3);
-
 //   for testin':
 // console.log(filenames);
 // console.log(labels);
