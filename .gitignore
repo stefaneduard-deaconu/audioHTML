@@ -1,3 +1,7 @@
 *.wav
 *.ogg
 *.mp3
+
+dist/
+images/
+
