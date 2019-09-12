@@ -2,51 +2,50 @@
 
 <head>
 	<title>
-		audioHTML
+		Dictionar audio
 	</title>
-	<link rel="stylesheet" type="text/css" href="./style/stylesheet.css"
+	<link rel="stylesheet" type="text/css" href="./styles/stylesheet.css">
 </head>
 
 <body>
 	<div class="row">
 		<div class="left">
-			<h2 id="audio_label">
-				{{ label }}
-			</h2>
-			<audio controls id="audio_player">
-				<source src="./audio/_industrial.wav" type="audio/wav">
-			</audio>
+			<div id="audioDiv">
+				<h2 id="audio_label">
+					{{ label }}
+				</h2>
+				<audio controls id="audio_player">
+					<source src="" type="audio/mp3">
+				</audio>
+			</div>
+			<div id="textDiv">
+				<!-- Pay attentions to menu ribbons elements, only keep window and exit :) -->
+			</div>
+			<div id="pictureDiv">
+				<span class="alignHelper">
+				<img src="" />
+			</div>
 		</div>
 		<div class="right">
 			<div class="btn-group" id="buttons">
-				<div id="contents"> Sounds and likes </div>
-				<button v-for="btn in btns"> {{ btn.label }} </button> <!-- logically, these must be rendered after the scripts are added -->
-
-
+				<div id="contents"> Contents </div>
+				<button v-for="btn in btns"> {{ btn.label }} </button>
 			</div>
 		</div>
 	</div>
-	<!-- for performance, I will make a script separated for Vue objects and the conex -->
-	<script src="./script/vue.js"></script>
-	<script src="./script/script.js"></script>
-	<script>
-	// TODO  this is the part where we also use JS for making it mobile first :)
-		let buttonCount = document.getElementsByTagName("button").length;
-		let buttonHeight = 36; // hoist this as a global argument later (**1)
-		console.log(buttonCount)
-		console.log(42 + buttonHeight * buttonCount + 1); // one last pxm for the bottom border of the .btn-group div
-		let btnTotalHeight = 42 + buttonHeight * buttonCount + 1;
-		let btnClientHeight = document.getElementById('buttons').clientHeightl
-		console.log(document.getElementById('buttons').clientHeight);
-		if (btnTotalHeight > btnClientHeight) {
-			// add the corresponding class to the .btn-group div
-		}
-		else {
-			// add the corresponding class to the .btn-group div
-		}
-
-	</script>
-
+	<div class="row" style="font-family: sans-serif; ">
+		<div>
+			Icons made by
+			<b>Freepik (www.flaticon.com/authors/freepik)</b>
+			from
+			<b>www.flaticon.com,</b>
+			under the licence
+			<b>Creative Commons BY 3.0</b>
+		</div> <!---->
+	</div>
+	<!-- TODO for performance, I will make a script separated for Vue objects and the conex -->
+	<script src="./scripts/vue.js"></script>
+	<script src="./scripts/script.js"></script>
 </body>
 
 </html>
