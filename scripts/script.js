@@ -1,3 +1,116 @@
+// we follow a model:
+// ->  we won't have two identical named files with different labels!
+var filenames = [
+	'activities',
+	'animalsd',
+	'animalss',
+	'bathroom',
+	'beverage',
+	'birds',
+	'body',
+	'cardinal_points_and_continents',
+	'clothes',
+	'colors',
+	'communication',
+	'company',
+	'economy',
+	'elements',
+	'emotions_and_feelings',
+	'family',
+	'flowers',
+	'food',
+	'fruits',
+	'hobbies',
+	'house',
+	'insects',
+	'jobs',
+	'kitchen',
+	'living_room',
+	'looks',
+	'mathematics',
+	'medicine',
+	'month_week_season',
+	'my_room',
+	'natural_hazards',
+	'numbers',
+	'office',
+	'personality',
+	'places',
+	'plants_and_trees',
+	'relations',
+	'school',
+	'seven_senses',
+	'space',
+	'sports',
+	'surfaces',
+	'time',
+	'transportation_means',
+	'trip',
+	'underwater',
+	'vegetables',
+	'weather'
+];
+
+var labels = {
+	'activities': 'Activities',
+	'animalsd': 'Animals (Tame)',
+	'animalss': 'Animals (Wild)',
+	'bathroom': 'Bathroom',
+	'beverage': 'Beverage',
+	'birds': 'Birds',
+	'body': 'Body',
+	'cardinal_points_and_continents': 'Cardinal Points and Continents',
+	'clothes': 'Clothes',
+	'colors': 'Colors',
+	'communication': 'Communication',
+	'company': 'Company',
+	'economy': 'Economy',
+	'elements': 'Elements',
+	'emotions_and_feelings': 'Emotions and Feelings',
+	'family': 'Family',
+	'flowers': 'Flowers',
+	'food': 'Food',
+	'fruits': 'Fruits',
+	'hobbies': 'Hobbies',
+	'house': 'House',
+	'insects': 'Insects',
+	'jobs': 'Jobs',
+	'kitchen': 'Kitchen',
+	'living_room': 'Living Room',
+	'looks': 'Looks',
+	'mathematics': 'Mathematics',
+	'month_week_season': 'Months, Days and Seasons',
+	'my_room': 'My Room',
+	'natural_hazards': 'Natural Hazards',
+	'numbers': 'Numbers',
+	'office': 'Office',
+	'places': 'Places',
+	'plants_and_trees': 'Plants and Trees',
+	'relations': 'Relations',
+	'school': 'School',
+	'seven_senses': 'Seven Senses',
+	'space': 'Space',
+	'sports': 'Sports',
+	'surfaces': 'Surfaces',
+	'time': 'Time',
+	'transportation_means': 'Transportation Means',
+	'trip': 'Trip',
+	'underwater': 'Underwater',
+	'vegetables': 'Vegetables',
+	'weather': 'Weather'
+};
+
+//   for testin':
+// console.log(filenames);
+// console.log(labels);
+// // You can easily, for testing, define your own labels here:
+// var labels = {
+//     '_industrial': 'Industrial Beats'
+// }
+
+var btns = []
+
+
 // we use this next function to create labels for each file
 // but we will create labels as they become necessary
 function toLabel(string) {
@@ -20,22 +133,6 @@ function set(option) { // option is a string, that stores the name of the audio 
     player.load();
 }
 
-// we follow a model:
-//   we won't have two identical named files with different labels !
-
-// generating a selection of buttonCount buttons, and of labelCount implicit labels:
-var filenames = [ ]
-var labels = { }
-
-//   for testin':
-// console.log(filenames);
-// console.log(labels);
-// // You can easily, for testing, define your own labels here:
-// var labels = {
-//     '_industrial': 'Industrial Beats'
-// }
-
-var btns = []
 
 function generateButtons(filenames, labels) {
     // we create teh btn's, by using the labels as the explicit ones
