@@ -1,4 +1,12 @@
-// auxiliary functions
+/*
+     █████  ██    ██ ██   ██         ███████ ███    ██ ███████
+    ██   ██ ██    ██  ██ ██          ██      ████   ██ ██
+    ███████ ██    ██   ███           █████   ██ ██  ██ ███████
+    ██   ██ ██    ██  ██ ██          ██      ██  ██ ██      ██
+    ██   ██  ██████  ██   ██         ██      ██   ████ ███████
+*/
+
+
 function toLabel(string) {
     if (!string) return ''
     // replace replaces only the first occurence, for some reason :)()(
@@ -12,7 +20,15 @@ function toLabel(string) {
     return firstLetterToUpper + remainder;
 }
 
-// modules:
+/*
+        ███    ███  ██████  ██████  ██    ██ ██      ███████ ███████
+        ████  ████ ██    ██ ██   ██ ██    ██ ██      ██      ██
+        ██ ████ ██ ██    ██ ██   ██ ██    ██ ██      █████   ███████
+        ██  ██  ██ ██    ██ ██   ██ ██    ██ ██      ██           ██
+        ██      ██  ██████  ██████   ██████  ███████ ███████ ███████
+*/
+
+
 const fs = require('fs')
 const ipc = require('electron').ipcRenderer;
 
@@ -47,6 +63,16 @@ const ImagePresentation = function(id, images) {
 
 var filenames = JSON.parse(ipc.sendSync('send-filenames'))
 var labels = JSON.parse(ipc.sendSync('send-labels'))
+
+
+/*
+        ██████  ██    ██ ████████ ████████  ██████  ███    ██ ███████
+        ██   ██ ██    ██    ██       ██    ██    ██ ████   ██ ██
+        ██████  ██    ██    ██       ██    ██    ██ ██ ██  ██ ███████
+        ██   ██ ██    ██    ██       ██    ██    ██ ██  ██ ██      ██
+        ██████   ██████     ██       ██     ██████  ██   ████ ███████
+*/
+
 
 function generateButtons(filenames, labels) {
     let btns = []
@@ -83,6 +109,14 @@ var vueButtons = new Vue({
     }
 })
 
+
+/*
+            ██ ███    ███  █████   ██████  ███████ ███████
+            ██ ████  ████ ██   ██ ██       ██      ██
+            ██ ██ ████ ██ ███████ ██   ███ █████   ███████
+            ██ ██  ██  ██ ██   ██ ██    ██ ██           ██
+            ██ ██      ██ ██   ██  ██████  ███████ ███████
+*/
 
 
 function generatePresentations(filenames) {
