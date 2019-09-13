@@ -29,7 +29,7 @@
 		<div class="right">
 			<div class="btn-group" id="buttons">
 				<div id="contents"> Contents </div>
-				<button v-for="btn in btns"> {{ btn.label }} </button>
+				<button v-for="btn in vueButtons" :id="'btn-' + btn.id"> {{ btn.label }} </button>
 			</div>
 		</div>
 	</div>
