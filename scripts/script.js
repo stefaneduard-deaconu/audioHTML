@@ -1,3 +1,4 @@
+// auxiliary functions
 function toLabel(string) {
     if (!string) return ''
     // replace replaces only the first occurence, for some reason :)()(
@@ -10,28 +11,42 @@ function toLabel(string) {
     remainder = string.substr(1); // getting the remainder of the string
     return firstLetterToUpper + remainder;
 }
-// const fs = require('fs')
 
+// modules:
+const fs = require('fs')
 const ipc = require('electron').ipcRenderer;
-ipc.send('toMain','a string', 10);
 
 const AudioButton = function(audioSource, label, id) {
     const btn = {}
     btn.audioSource = audioSource
     btn.label = label
     btn.id = id
-    btn.getLabel = function() { return btn.label }
-    btn.getId = function() { return btn.id }
-    btn.setLabel = function(label) { btn.label = label}
-    btn.setId = function(id) { btn.id = id}
+    btn.getLabel = function() {
+        return btn.label
+    }
+    btn.getId = function() {
+        return btn.id
+    }
+    btn.setLabel = function(label) {
+        btn.label = label
+    }
+    btn.setId = function(id) {
+        btn.id = id
+    }
     return btn
+}
+const ImagePresentation = function(id, images) {
+    const presentation = {}
+    presentation.id = id
+    presentation.images = images
+    return presentation
 }
 
 // we follow a model:
 // ->  we won't have two identical named files with different labels!
 
-var filenames = [ ]
-var labels = { }
+var filenames = JSON.parse(ipc.sendSync('send-filenames'))
+var labels = JSON.parse(ipc.sendSync('send-labels'))
 
 function generateButtons(filenames, labels) {
     let btns = []
@@ -51,10 +66,7 @@ function generateButtons(filenames, labels) {
     return btns
 }
 
-var buttons = generateButtons(
-    JSON.parse(ipc.sendSync('send-filenames')),
-    JSON.parse(ipc.sendSync('send-labels'))
-)
+var buttons = generateButtons(filenames, labels)
 
 // generate the Vue object used for generating the buttons:
 let btns_data = []
@@ -69,7 +81,52 @@ var vueButtons = new Vue({
     data: {
         btns: btns_data
     }
-});
+})
+
+
+
+function generatePresentations(filenames) {
+    const base_dir = './images/'
+    presentations = []
+    for (fn of filenames) {
+        base_fn = base_dir + fn
+        images = []
+        toContinue = true
+        for (number = 0; toContinue && number < 3; number++) {
+            complete_path_to_file = `${base_fn}${number}.jpg`
+            // Synchronous method
+            try {
+                // TODO  this enxt part doesn't allow for a dynamic image extension
+                if (fs.existsSync(complete_path_to_file)) {
+                    //file exists
+                    images.push(fn + number + '.jpg')
+                } else {
+                    toContinue = false
+                }
+            } catch (err) {
+                console.error(err)
+            }
+            // The next method is asynchronous
+            // console.log(complete_path_to_file)
+            // fs.access(complete_path_to_file, fs.F_OK, (err) => {
+            //     if (err) {
+            //         // BUG GY
+            //         // console.error(err)
+            //         toContinue = false
+            //         return
+            //     }
+            //     //file exists
+            //     console.log(complete_path_to_file)
+            //     images.push(fn + number + '.jpg')
+            // })
+        }
+        presentations.push(images)
+    }
+    return presentations
+}
+var presentations = generatePresentations(filenames)
+console.log(presentations)
+
 
 
 /*
@@ -318,12 +375,12 @@ function addLetterToButton(index, letter) {
     // to align the text :))
     btn.style.paddingRight = '60px' // 24 + 36
 }
-for (i of [4, 7, 12]) {
-    addLetterToButton(i, 'i')
-}
-for (i of [5, 6, 9]) {
-    addLetterToButton(i, 't')
-}
+// for (i of [4, 7, 12]) {
+//     addLetterToButton(i, 'i')
+// }
+// for (i of [5, 6, 9]) {
+//     addLetterToButton(i, 't')
+// }
 
 // TODO  e-btn (expandable button)
 // we presume the buttons are always together, and in the array the order is ascending
@@ -493,7 +550,7 @@ var buttonsToExpand = {
     }
 }
 
-groupButtons('animalsd', 2, 'animals', 'Animals');
+// groupButtons('animalsd', 2, 'animals', 'Animals');
 
 
 
