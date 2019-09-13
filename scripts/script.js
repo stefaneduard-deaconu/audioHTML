@@ -32,6 +32,40 @@ function toLabel(string) {
 const fs = require('fs')
 const ipc = require('electron').ipcRenderer;
 
+
+
+
+/*
+        ███████ ███████ ████████ ████████ ██ ███    ██  ██████  ███████
+        ██      ██         ██       ██    ██ ████   ██ ██       ██
+        ███████ █████      ██       ██    ██ ██ ██  ██ ██   ███ ███████
+             ██ ██         ██       ██    ██ ██  ██ ██ ██    ██      ██
+        ███████ ███████    ██       ██    ██ ██   ████  ██████  ███████
+*/
+
+const SettingsClass = function(oldSettings) {
+    const settings = { }
+    for (key in oldSettings) {
+        settings[key] = oldSettings[key]
+    }
+    return settings
+}
+
+var settingsObject = SettingsClass(
+    JSON.parse(ipc.sendSync('send-settings'))
+)
+
+console.log(settingsObject)
+
+/*
+        ██████  ██    ██ ████████ ████████  ██████  ███    ██ ███████
+        ██   ██ ██    ██    ██       ██    ██    ██ ████   ██ ██
+        ██████  ██    ██    ██       ██    ██    ██ ██ ██  ██ ███████
+        ██   ██ ██    ██    ██       ██    ██    ██ ██  ██ ██      ██
+        ██████   ██████     ██       ██     ██████  ██   ████ ███████
+*/
+
+
 const AudioButton = function(audioSource, label, id) {
     const btn = {}
     btn.audioSource = audioSource
@@ -63,15 +97,6 @@ const ImagePresentation = function(id, images) {
 
 var filenames = JSON.parse(ipc.sendSync('send-filenames'))
 var labels = JSON.parse(ipc.sendSync('send-labels'))
-
-
-/*
-        ██████  ██    ██ ████████ ████████  ██████  ███    ██ ███████
-        ██   ██ ██    ██    ██       ██    ██    ██ ████   ██ ██
-        ██████  ██    ██    ██       ██    ██    ██ ██ ██  ██ ███████
-        ██   ██ ██    ██    ██       ██    ██    ██ ██  ██ ██      ██
-        ██████   ██████     ██       ██     ██████  ██   ████ ███████
-*/
 
 
 function generateButtons(filenames, labels) {
@@ -160,6 +185,25 @@ function generatePresentations(filenames) {
 }
 var presentations = generatePresentations(filenames)
 console.log(presentations)
+
+
+
+/*
+         █████        ██████  ██       █████  ██    ██ ███████ ██████
+        ██   ██       ██   ██ ██      ██   ██  ██  ██  ██      ██   ██
+        ███████ █████ ██████  ██      ███████   ████   █████   ██████
+        ██   ██       ██      ██      ██   ██    ██    ██      ██   ██
+        ██   ██       ██      ███████ ██   ██    ██    ███████ ██   ██
+*/
+
+window.addEventListener('load', function() {
+    setTimeout(function () {
+        document.getElementById('audio-player').classList.add('active')
+    }, 618);
+
+})
+
+
 
 
 

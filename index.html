@@ -5,21 +5,26 @@
 		Dictionar audio
 	</title>
 	<link rel="stylesheet" type="text/css" href="./styles/stylesheet.css">
+	<link rel="stylesheet" type="text/css" href="./styles/audioplayer.css">
 </head>
 
 <body>
 	<div class="row">
 		<div class="left">
 			<div id="audioDiv">
-				<h2 id="audio_label">
-					{{ label }}
-				</h2>
-				<audio controls id="audio_player">
-					<source src="" type="audio/mp3">
-				</audio>
+				<div id="audio-label">
+					<h2>This is the first label</h2>
+				</div>
+				<div id="audio-player">
+					<div id="audio-bar">
+						<div id="section-end"></div>
+						<div id="audio-scroll"></div>
+						<div id="section-start"></div>
+					</div>
+				</div>
 			</div>
 			<div id="textDiv">
-				<!-- Pay attentions to menu ribbons elements, only keep window and exit :) -->
+
 			</div>
 			<div id="pictureDiv">
 				<span class="alignHelper">
@@ -29,7 +34,7 @@
 		<div class="right">
 			<div class="btn-group" id="buttons">
 				<div id="contents"> Contents </div>
-				<button v-for="btn in vueButtons" :id="'btn-' + btn.id"> {{ btn.label }} </button>
+				<button v-for="btn in btns" :id="'btn-' + btn.id"> {{ btn.label }} </button>
 			</div>
 		</div>
 	</div>

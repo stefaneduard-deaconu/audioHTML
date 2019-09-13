@@ -1,0 +1,49 @@
+/* audio div */
+#audioDiv {
+	/*padding-bottom: 50px; /* for the audio's animation */
+	padding-left: 5%;
+	padding-right: 5%;
+}
+#audioDiv {
+	width: 90%;
+	height: 225px;
+}
+
+#audioDiv div div#audio-label {
+	width: 100%;
+	height: 225px;
+	text-align: center;
+}
+#audioDiv div#audio-player {
+	width: 100%;
+	border-radius: 113px
+}
+/* audio HTML5 element: */
+#audio-player:hover, #audio-player:focus, #audio-player.active
+{
+	box-shadow: 15px 15px 20px rgba(0,0, 0, 0.4);
+	transform: scale(1.05);
+	border: 1px solid black;
+}
+/* #audio-player.playing{
+	outline: 1px none white;
+	border-radius: 100px;
+	border: 1px solid black;/*rgb(2, 200, 259);
+} */
+#audio-player {
+	height: calc(55px + 5px);
+	padding-bottom: 5px;
+    background: whitesmoke;
+	/* margin-top: 15px; */
+	-webkit-transition:all 0.382s linear;
+	-moz-transition:all 0.382s linear;
+	-o-transition:all 0.382s linear;
+	transition:all 0.382s linear;
+	-moz-box-shadow: 2px 2px 4px 0px #006773;
+	-webkit-box-shadow:  2px 2px 4px 0px #006773;
+	box-shadow: 2px 2px 4px 0px #006773;
+	-moz-border-radius:7px 7px 7px 7px ;
+	-webkit-border-radius:7px 7px 7px 7px ;
+	border-radius:100px;
+}
+/* TODO  remove any focus effect, by having no color, and work solely using border.*/
