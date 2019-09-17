@@ -74,16 +74,11 @@
 }
 
 #audio-bar div {
-	height: 100%;
-	display: inline-block;
-/* for the section start and end */
-	background-color: black;
-	opacity: 0.2;
-	/*  */
 	border-radius: 15px;
 }
 
 #audio-bar #play-button {
+	z-index: 3;
 	position: absolute;
 	left: 0px;
 	/* margin: 15px;
@@ -120,24 +115,24 @@
 	margin-left: calc(5% + 0px);
 }
 #audio-bar:hover #audio-scroll {
-	/* width: 100%; */
-	background-color: grey;
+	background-color: black;
 	opacity: 1;
 }
 #audio-bar:hover #play {
 	opacity: 1;
 	width: 30px;
-	height: 20px;
+	height: 18px;
 	top: 5px;
+	left: 10px;
 	/* background-color: black; */
 	border-style: solid;
 	border-width: 15px;
 	border-color: white white white black;
-	border-width: 10px 0px 10px 15px;
+	border-width: 9px 0px 9px 14px;
 	box-sizing: border-box;
 	position: absolute;
 	border-radius: 0 25px 25px 0;
-	left: 10px;
+	left: 11px;
 }
 #audio-bar:hover #section-start {
 	left: 40px;
@@ -191,38 +186,24 @@
 	transition: opacity 0.382s;
 	opacity: 1;
 	z-index: 3;
-	width: 10px;
-	height: 20px;
-	border-radius: 20px;
-	border: 5px solid white;
 	overflow-x: hidden;
 	overflow-y: hidden;
-	top: 0px;
-	left: 45px;
 }
 
 #audio-bar #section-end:hover {
 	transition: opacity 0.382s;
 	opacity: 1;
 	z-index: 3;
-	width: 10px;
-	height: 20px;
-	border-radius: 20px;
-	border: 5px solid white;
 	overflow-x: hidden;
 	overflow-y: hidden;
-	top: 0px;
-	right: 5px;
 }
 
 /* We could undertand the last .section-c.. as an "existential if" */
 #audio-bar div:hover .section-circle {
-
 	width: 30px;
-	left: -10px;
 	height: 60px;
 	position: absolute;
-	top: -20px;
+	top: -15px;
 	opacity: 1;
 	background-color: black;
 /*  */
