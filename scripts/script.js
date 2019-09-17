@@ -147,26 +147,27 @@ var vueButtons = new Vue({
 
 const ImagesGallery = (function() {
     var instance
+
     function createInstance() { // called only once during the execution
         const gallery = {}
         // fields and members:
         gallery.img = document.querySelector("#pictureDiv img")
         gallery.setPicture = function(src) {
             let timer = 0
-            let interval = setInterval(function () {
+            let interval = setInterval(function() {
                 timer += 16
                 gallery.img.style.top = `${1.618 * (timer / 618) * 100}%`
             }, 16);
-            setTimeout(function(){
+            setTimeout(function() {
                 gallery.img.src = src
                 gallery.img.style.top = `${-1.618 * (timer / 618) * 100}%`
                 window.clearInterval(interval)
-                interval = setInterval(function () {
+                interval = setInterval(function() {
                     timer -= 16
                     gallery.img.style.top = `${-1.618 * (timer / 618) * 100}%`
                 }, 16);
             }, 618)
-            setTimeout(function(){
+            setTimeout(function() {
                 window.clearInterval(interval)
                 gallery.img.style.top = `0px`
             }, 1236)
@@ -184,7 +185,9 @@ const ImagesGallery = (function() {
 })()
 
 gallery = ImagesGallery.getInstance()
-setTimeout(function(){ gallery.setPicture("images/animalsd0.jpg") }, 1000)
+setTimeout(function() {
+    gallery.setPicture("images/animalsd0.jpg")
+}, 1000)
 
 
 console.log(ImagesGallery.getInstance())
@@ -254,6 +257,167 @@ window.addEventListener('load', function() {
 
 
 
+/*
+██████   ██████   ██████ ███████
+██   ██ ██    ██ ██      ██
+██   ██ ██    ██ ██      ███████
+██   ██ ██    ██ ██           ██
+██████   ██████   ██████ ███████
+*/
+
+const Docs = (function() {
+    var instance
+
+    function createInstance() {
+        const docs = {}
+        docs.docsBoard = document.createElement('div')
+        docs.docsBoard.id = 'docs-board'
+        docs.show = function() {
+            let dash = docs.docsBoard
+            dash.style.left = '-100%'
+            document.body.appendChild(docs.docsBoard)
+            // include the html from a GET request:
+            dash.innerHTML = '<iframe src="./docs/index.html" style="width:calc(100% - 4px); height: 100%"></iframe>'
+            // TODO  simply importing from HTML request, not using iframe
+            // dash.setAttribute('w3-include-html', './docs/docs.html');
+            // file = dash.getAttribute('w3-include-html')
+            // if (file) { // TODO  redundancy here, because the code must be restructured
+            //     /* Make an HTTP request using the attribute value as the file name: */
+            //     xhttp = new XMLHttpRequest();
+            //     xhttp.onreadystatechange = function() {
+            //         if (this.readyState == 4) {
+            //             if (this.status == 200) {
+            //                 // dash.innerHTML = this.responseText;
+            //             }
+            //             if (this.status == 404) {
+            //                 // dash.innerHTML = "Page not found.";
+            //             }
+            //             /* Remove the attribute: */
+            //             // dash.removeAttribute("w3-include-html");
+            //         }
+            //     }
+            //     xhttp.open("GET", file, true);
+            //     xhttp.send();
+            //     /* Exit the function: */
+            //     return;
+            // }
+            // now we decrease the size of the app window:
+            let rows = document.querySelectorAll('.row')
+            let outerTimer = 0
+            let decrease = function(row) {
+                outerTimer += 16
+                // document.body.style.width = '90%'
+                row.style.boxShadow = '-3px 0px 7px 0px black' // TODO  styling
+                row.style.marginLeft = `calc(5% + ${outerTimer / 382 * 2}%)`
+                row.style.marginTop = `calc(5% + ${outerTimer / 382 * 2}%)`
+                row.style.width = `calc(90% - ${outerTimer / 382 * 3}%)`
+                row.style.height = `calc(90% - ${outerTimer / 382 * 3}%)`
+            }
+            let decrease2 = function(row) {
+                decrease(row)
+                row.style.marginTop = '0px'
+                row.style.overflowX = 'hidden'
+            }
+            let intervals = [
+                window.setInterval(function() {
+                    decrease(rows[0])
+                }, 8),
+                window.setInterval(function() {
+                    decrease2(rows[1])
+                }, 8)
+            ]
+            setTimeout(function() {
+                // close the previous intervals:
+                intervals.forEach((each) => {
+                    window.clearInterval(each)
+                })
+                // animate the entering of the docsBoard
+                let timer = 0
+                let interval = window.setInterval(function() {
+                    timer += 16
+                    dash.style.left = `-${100 - (timer / 618) * 100}%`
+                }, 16)
+                window.setTimeout(function() {
+                    dash.style.left = '0px  '
+                    window.clearInterval(interval)
+                }, 618)
+            }, 382)
+        }
+        docs.hide = function() {
+            let dash = docs.docsBoard
+            let timer = 0
+            let interval = window.setInterval(function() {
+                timer += 16
+                dash.style.left = `-${100 - (1 - timer / 618) * 100}%`
+            }, 16)
+            setTimeout(function() {
+                window.clearInterval(interval)
+                dash.style.left = '-100%'
+                document.body.removeChild(docs.docsBoard)
+            }, 618)
+            // now we increase the size of the app window:
+            let rows = document.querySelectorAll('.row')
+            let outerTimer = 0
+            let increase = function(row) {
+                outerTimer += 16
+                row.style.boxShadow = '-3px 0px 7px 0px black' // TODO  styling
+                row.style.marginLeft = `calc(7% - ${outerTimer / 382 * 2}%)`
+                row.style.marginTop = `calc(7% - ${outerTimer / 382 * 2}%)`
+                row.style.width = `calc(87% + ${outerTimer / 382 * 3}%)`
+                row.style.height = `calc(87% + ${outerTimer / 382 * 3}%)`
+            }
+            let setDefault = function(row) {
+                row.style.marginLeft = row.style.marginTop = ' '
+                row.style.width = row.style.height = ' '
+            }
+            window.setTimeout(function() {
+                let intervals = [
+                    window.setInterval(function() {
+                        increase(rows[0])
+                    }, 8),
+                    window.setInterval(function() {
+                        increase(rows[1])
+
+                    }, 8)
+                ]
+                window.setTimeout(function() {
+                    // close the previous intervals:
+                    intervals.forEach((each) => {
+                        window.clearInterval(each)
+                    })
+                    // and get the window to the default (CSS) size
+                    rows[0].style.boxShadow = ''
+                    rows[0].style.width = ''
+                    rows[0].style.height = ''
+                    rows[0].style.marginLeft = ''
+                    rows[0].style.marginTop = ''
+                    rows[1].style.boxShadow = ''
+                    rows[1].style.width = ''
+                    rows[1].style.height = ''
+                    rows[1].style.marginLeft = ''
+                    rows[1].style.marginTop = ''
+                    // rows.forEach((each) => { setDefault(each) })
+                }, 382)
+            }, 618)
+
+        }
+        return docs
+    }
+    return {
+        getInstance: function() {
+            if (!instance) {
+                instance = createInstance()
+            }
+            return instance
+        }
+    }
+})()
+
+var docs = Docs.getInstance()
+console.log(docs)
+
+window.setTimeout(docs.show, 3236)
+window.setTimeout(docs.hide, 5000)
 
 /*
  * after generating the buttons, we choose the first one to be loaded
