@@ -1,0 +1,22 @@
+/* <!-- <div id="loadingDiv" style="position: absolute; margin-left: 61.8%;
+								margin-top: 45px; background-color: red;
+								z-index: 2; width: 20px; height: 20px">
+
+	</div>
+	<script>
+		var div = document.getElementById('loadingDiv');
+		var id = setInterval(frame, 10);
+		var posTop = 0;
+		var posLeft = 0;
+		function frame() {
+
+			if (posTop == 45) {
+			  clearInterval(id);
+			} else {
+			  posTop++;
+			  posLeft--;
+			  div.style.top  = posTop + 'px';
+			  div.style.left = posLeft + 'px';
+			}
+		}
+	</script> --> */

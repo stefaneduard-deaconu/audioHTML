@@ -1,0 +1,302 @@
+/* no elements should focus, ever :)) */
+* :focus {
+	outline: none;
+}
+/* * :click {
+	outline: none;
+} */
+
+
+/* Main app screen sectioning: */
+.left {
+	float: left;
+	/* for fitting into page: */
+	padding: 5% 0 0 0;
+}
+.right {
+	/* for fitting into page: */
+	padding: 5% 0px 5% 0px;
+}
+
+.row:nth-child(1) {
+	height: calc(100% - 20px);
+	margin-bottom: 10px;
+}
+.row:nth-child(2){
+	font-size: 10px;
+	color: grey;
+	height:20px;
+	text-align: center;
+}
+.row:nth-child(2) b{
+	color: black;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* setting the buttons layout */
+/* (0) set the btn-group border - simple, solid black line */
+.btn-group {
+	border-bottom: 2px solid black;
+	background-color: whitesmoke;
+}
+
+/* audio div */
+#audioDiv {
+	/*padding-bottom: 50px; /* for the audio's animation */
+	padding-left: 5%;
+	padding-right: 5%;
+}
+#audioDiv {
+	width: 90%;
+	height: 225px;
+}
+
+/* as to vertically align an img inside a div :) */
+/* This is below the audio button and above the gallery */
+#textDiv {
+	height: 5%;
+	text-align: center;
+}
+
+/* picture div */
+#pictureDiv {
+    position: relative;
+}
+img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+#pictureDiv {
+	display: inline-block;
+	float: left;
+	width:90%;
+	height: calc(calc(85% - 225px) - 2px); /* the last 2px's for thesecond .row - the aknowledgements*/
+	padding: 5% 5%;
+	margin: auto; /* for margin-left and -right */
+	border: 1px solid grey;
+}
+#pictureDiv img {
+	width: 90%;
+	max-height: 90%;
+	/* display: inline-block; */
+}
+
+
+.btn-group > button {
+  background-color: rgb(2, 200, 259); /*rgb(80, 177, 198); /* Green background */
+  border: 1px solid black; /* Green border */
+  color: white; /* White text */
+  padding: 10px 24px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  width: 100%; /* Set a width if needed */
+  display: block; /* Make the buttons appear below each other */
+}
+.btn-group > button {
+  border-top: none;
+}
+.btn-group > button:last-child {
+	border-bottom: 2px dashed black;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: rgb(2, 182, 236); /*rgb(85, 187, 210); /**/
+}
+
+/* setting the "contents" div */
+.btn-group div#contents {
+    text-align: center;
+	padding-top: 10px;
+	height: 36px;
+	border: 1px solid black; /* Green border */
+	border-bottom: 2px;
+}
+/* now the different buttons (.x-btn) */
+
+
+
+/* the divs situated at the left of the x-btn's */
+.btn-group div.x-btn {
+	width: 35px;
+	height: 35px;
+	float: left;
+	/* border and looks: */
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	background-color: white;
+}
+/* the img's inside the divs :) SCSS*/
+.btn-group div:not(:first-of-type) img {
+	width: calc(35px - 8px);
+	height: calc(35px - 8px);
+	margin: 0;
+	position: relative;
+	/* centering it */
+	padding: calc(8px / 2) calc(8px / 2);
+}
+/* the x-btn's :D */
+.btn-group button.x-btn {
+	width: calc(100% - 36px);
+	margin-left: none;
+	float: right;
+	/* border and looks: */
+	border-left: none;
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+}
+/* the e-btn's :D and e-btn's left symbol*/
+.btn-group button.e-btn {
+	/* border and looks: */
+	border-left: none;
+}
+.btn-group div.e-btn {
+	/* border and looks: */
+	cursor: pointer;
+	background-color: rgb(2, 200, 255);
+}
+
+
+/* button subgroups: */
+div.btn-subgroup {
+	width: 100%;
+	/* position: relative; */
+  height: fit-content;
+}
+.btn-subgroup > button {
+  background-color: rgb(2, 200, 259); /*rgb(80, 177, 198); /* Green background */
+  border: 1px dashed black; /* Green border */
+  color: white; /* White text */
+  padding: 10px 24px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  width: 100%; /* Set a width if needed */
+  display: block; /* Make the buttons appear below each other */
+}
+.btn-subgroup > button {
+  border-top: none;
+}
+.btn-subgroup > button:last-child {
+	border-bottom: 1px dashed black;
+}
+
+
+
+
+
+
+/* setting the left side: */
+.left {
+	position: relative;
+	height: 100%;
+	width: calc(85% * 0.618);
+	padding-left: 5%;
+	padding-right: 5%;
+	padding-top: 0px;
+	padding-bottom: 1px solid black;
+}
+.right {
+	height: 100%;
+	width: calc(85% * 0.382);
+	padding-right: 5%;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+.left h2 {
+	text-align: center;
+}
+.left audio {
+	width: 100%;
+}
+.btn-group {
+	overflow-y: scroll;
+	height: 100%;
+}
+
+/* setting "contents" the btn-group navbar :)) ??? */
+.right {
+	position: relative;
+}
+.btn-group {
+	position: relative;
+}
+.btn-group div#contents {
+	padding-top: 10px;
+	border-bottom: 1px solid black;/* */
+    position: absolute;
+	left: 0;
+	top: 0;
+	width: calc(100% - 2px);
+	height: 30px;
+	background-color: white;
+}
+.btn-group > button:first-of-type { /* the first child of type button */
+	margin-top:42px;
+}
+
+
+button:active {
+	border: 1px solid whitesmoke;
+}
+button:after {
+	border: 1px solid slate;
+}
+
+/* No scrolling for this app: */
+/* hide all the scrollbars */
+ * {
+	 overflow-y: hidden;
+ }
+/* Button Group scroll styling */
+.btn-group::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+	border-radius: 0px 0px 0px 0px;
+}
+.btn-group::-webkit-scrollbar
+{
+	width: 13px;
+	background-color: #F5F5F5;
+}
+.btn-group::-webkit-scrollbar-thumb
+{
+	border-radius: 0px 0px 0px 0px;
+	background-color: black;
+}
+
+
+/* audio HTML5 element: */
+audio:hover, audio:focus, audio:active
+{
+box-shadow: 15px 15px 20px rgba(0,0, 0, 0.4);
+transform: scale(1.05);
+}
+audio:focus{
+	outline: 1px none white;
+	border-radius: 100px;
+	border: 1px solid black;/*rgb(2, 200, 259);*/
+}
+audio {
+	height: calc(55px + 5px);
+	padding-bottom: 5px;
+    background: whitesmoke;
+	margin-top: 15px;
+	-webkit-transition:all 0.382s linear;
+	-moz-transition:all 0.382s linear;
+	-o-transition:all 0.382s linear;
+	transition:all 0.382s linear;
+	-moz-box-shadow: 2px 2px 4px 0px #006773;
+	-webkit-box-shadow:  2px 2px 4px 0px #006773;
+	box-shadow: 2px 2px 4px 0px #006773;
+	-moz-border-radius:7px 7px 7px 7px ;
+	-webkit-border-radius:7px 7px 7px 7px ;
+	border-radius:100px;
+}
+/* TODO  remove any focus effect, by having no color, and work solely using border.*/
