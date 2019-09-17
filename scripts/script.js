@@ -44,7 +44,7 @@ const ipc = require('electron').ipcRenderer;
 */
 
 const SettingsClass = function(oldSettings) {
-    const settings = { }
+    const settings = {}
     for (key in oldSettings) {
         settings[key] = oldSettings[key]
     }
@@ -143,6 +143,54 @@ var vueButtons = new Vue({
             ██ ██      ██ ██   ██  ██████  ███████ ███████
 */
 
+// The next one is a Singleton gallery with presentations for each button
+
+const ImagesGallery = (function() {
+    var instance
+    function createInstance() { // called only once during the execution
+        const gallery = {}
+        // fields and members:
+        gallery.img = document.querySelector("#pictureDiv img")
+        gallery.setPicture = function(src) {
+            let timer = 0
+            let interval = setInterval(function () {
+                timer += 16
+                gallery.img.style.top = `${1.618 * (timer / 618) * 100}%`
+            }, 16);
+            setTimeout(function(){
+                gallery.img.src = src
+                gallery.img.style.top = `${-1.618 * (timer / 618) * 100}%`
+                window.clearInterval(interval)
+                interval = setInterval(function () {
+                    timer -= 16
+                    gallery.img.style.top = `${-1.618 * (timer / 618) * 100}%`
+                }, 16);
+            }, 618)
+            setTimeout(function(){
+                window.clearInterval(interval)
+                gallery.img.style.top = `0px`
+            }, 1236)
+        }
+        return gallery
+    }
+    return {
+        getInstance: function() {
+            if (!instance) {
+                instance = createInstance()
+            }
+            return instance
+        }
+    }
+})()
+
+gallery = ImagesGallery.getInstance()
+setTimeout(function(){ gallery.setPicture("images/animalsd0.jpg") }, 1000)
+
+
+console.log(ImagesGallery.getInstance())
+
+// TODO  model: the rule is that each filenames has associated images,
+// named by uding the filename and numbered 0, ...
 
 function generatePresentations(filenames) {
     const base_dir = './images/'
@@ -197,7 +245,7 @@ console.log(presentations)
 */
 
 window.addEventListener('load', function() {
-    setTimeout(function () {
+    setTimeout(function() {
         document.getElementById('audio-player').classList.add('active')
     }, 618);
 
