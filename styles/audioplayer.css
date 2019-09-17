@@ -18,23 +18,19 @@
 	width: 100%;
 	border-radius: 113px
 }
-/* audio HTML5 element: */
-#audio-player:hover, #audio-player:focus, #audio-player.active
+
+/* audio-player styling */
+#audio-player.active
 {
 	box-shadow: 15px 15px 20px rgba(0,0, 0, 0.4);
 	transform: scale(1.05);
 	border: 1px solid black;
 }
-/* #audio-player.playing{
-	outline: 1px none white;
-	border-radius: 100px;
-	border: 1px solid black;/*rgb(2, 200, 259);
-} */
+
 #audio-player {
 	height: calc(55px + 5px);
-	padding-bottom: 5px;
+	line-height: calc(55px + 5px);
     background: whitesmoke;
-	/* margin-top: 15px; */
 	-webkit-transition:all 0.382s linear;
 	-moz-transition:all 0.382s linear;
 	-o-transition:all 0.382s linear;
@@ -43,7 +39,200 @@
 	-webkit-box-shadow:  2px 2px 4px 0px #006773;
 	box-shadow: 2px 2px 4px 0px #006773;
 	-moz-border-radius:7px 7px 7px 7px ;
-	-webkit-border-radius:7px 7px 7px 7px ;
+	/* -webkit-border-radius:7px 7px 7px 7px ; */
 	border-radius:100px;
 }
-/* TODO  remove any focus effect, by having no color, and work solely using border.*/
+
+
+
+
+#audio-player:not(.active) #audio-bar {
+	margin: 15px;
+	margin-left: calc(5% + 0px);
+	margin-right: auto;
+	height: 30px;
+	width: calc(66.8% + 0px);
+	border-radius: 30px;
+	position: absolute;
+	display: block;
+	/*  */
+	background-color: lightgrey;
+	/* paddin for the start button: */
+}
+#audio-player.active #audio-bar {
+	margin: 15px;
+	margin-left: calc(5% + 0px);
+	margin-right: auto;
+	height: 30px;
+	width: 90%;
+	border-radius: 30px;
+	position: absolute;
+	display: block;
+	/*  */
+	background-color: lightgrey;
+	/* paddin for the start button: */
+}
+
+#audio-bar div {
+	height: 100%;
+	display: inline-block;
+/* for the section start and end */
+	background-color: black;
+	opacity: 0.2;
+	/*  */
+	border-radius: 15px;
+}
+
+#audio-bar #play-button {
+	position: absolute;
+	left: 0px;
+	/* margin: 15px;
+	margin-left: 5%; */
+	/*  */
+	background-color: white;
+	opacity: 0;
+	/*  */
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
+}
+#audio-bar:hover #play-button {
+	position: absolute;
+	left: 0px;
+	/*  */
+	background-color: white;
+	transition: opacity 0.618s;
+	opacity: 0.618;
+	/*  */
+	width: 30px;
+	height: 28px;
+	border-radius: 15px;
+}
+
+#audio-player:not(.active) #audio-bar:hover {
+	width: calc(66.8% - 40px);
+	padding-left: 40px;
+	margin-left: calc(5% + 0px);
+}
+#audio-player.active #audio-bar:hover {
+	width: calc(90% - 40px);
+	padding-left: 40px;
+	margin-left: calc(5% + 0px);
+}
+#audio-bar:hover #audio-scroll {
+	/* width: 100%; */
+	background-color: grey;
+	opacity: 1;
+}
+#audio-bar:hover #play {
+	opacity: 1;
+	width: 30px;
+	height: 20px;
+	top: 5px;
+	/* background-color: black; */
+	border-style: solid;
+	border-width: 15px;
+	border-color: white white white black;
+	border-width: 10px 0px 10px 15px;
+	box-sizing: border-box;
+	position: absolute;
+	border-radius: 0 25px 25px 0;
+	left: 10px;
+}
+#audio-bar:hover #section-start {
+	left: 40px;
+}
+
+#audio-bar #audio-scroll {
+	width: 100%;
+	background-color: grey;
+	opacity: 1;
+}
+#play-button {
+	overflow-x: hidden;
+	border: 1px solid black;
+}
+
+#audio-bar #section-start {
+	height: 30px;
+	width: 30px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-color: white;
+	opacity: 0.618;
+}
+#audio-bar #section-start .circle {
+	opacity: 1;
+}
+#audio-bar #section-end {
+	height: 30px;
+	width: 30px;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	background-color: white;
+	opacity: 0.618;
+}
+#audio-bar #section-end .circle {
+	opacity: 1;
+}
+
+#audio-bar #audio-scroll {
+	z-index: 1;
+	height: 4px;
+	background-color: black;
+	margin-top: 13px;
+	width: calc(100% - 30px);
+	margin-left: 15px;
+}
+
+#audio-bar #section-start:hover {
+	transition: opacity 0.382s;
+	opacity: 1;
+	z-index: 3;
+	width: 10px;
+	height: 20px;
+	border-radius: 20px;
+	border: 5px solid white;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	top: 0px;
+	left: 45px;
+}
+
+#audio-bar #section-end:hover {
+	transition: opacity 0.382s;
+	opacity: 1;
+	z-index: 3;
+	width: 10px;
+	height: 20px;
+	border-radius: 20px;
+	border: 5px solid white;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	top: 0px;
+	right: 5px;
+}
+
+/* We could undertand the last .section-c.. as an "existential if" */
+#audio-bar div:hover .section-circle {
+
+	width: 30px;
+	left: -10px;
+	height: 60px;
+	position: absolute;
+	top: -20px;
+	opacity: 1;
+	background-color: black;
+/*  */
+	border-style: solid;
+	border-width: 15px;
+	border-color: black white black white;
+	border-width: 30px 15px 30px 15px;
+	box-sizing: border-box;
+
+	border-radius: 15px 15px 15px 15px
+	border: 1px solid black;
+
+}
