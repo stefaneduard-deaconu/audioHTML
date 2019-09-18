@@ -46,17 +46,6 @@
 	background-color: whitesmoke;
 }
 
-/* audio div */
-#audioDiv {
-	/*padding-bottom: 50px; /* for the audio's animation */
-	padding-left: 5%;
-	padding-right: 5%;
-}
-#audioDiv {
-	width: 90%;
-	height: 225px;
-}
-
 /* as to vertically align an img inside a div :) */
 /* This is below the audio button and above the gallery */
 #textDiv {
@@ -85,7 +74,8 @@ img {
 }
 #pictureDiv img {
 	width: 90%;
-	max-height: 90%;
+	max-height: 61.8%;
+	position: absolute;
 	/* display: inline-block; */
 }
 
@@ -194,8 +184,8 @@ div.btn-subgroup {
 /* setting the left side: */
 .left {
 	position: relative;
-	height: 100%;
 	width: calc(85% * 0.618);
+	height: 100%;
 	padding-left: 5%;
 	padding-right: 5%;
 	padding-top: 0px;

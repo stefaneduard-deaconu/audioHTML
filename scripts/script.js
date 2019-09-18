@@ -44,7 +44,7 @@ const ipc = require('electron').ipcRenderer;
 */
 
 const SettingsClass = function(oldSettings) {
-    const settings = { }
+    const settings = {}
     for (key in oldSettings) {
         settings[key] = oldSettings[key]
     }
@@ -71,8 +71,18 @@ const AudioButton = function(audioSource, label, id) {
     btn.audioSource = audioSource
     btn.label = label
     btn.id = id
+    btn.tag = null
+    btn.getTag = function() {
+        return btn.tag
+    }
+    btn.setTag = function() {
+        btn.tag = document.querySelector(`#btn-${btn.id}`)
+    }
     btn.getLabel = function() {
         return btn.label
+    }
+    btn.getSource = function() {
+        return btn.audioSource
     }
     btn.getId = function() {
         return btn.id
@@ -85,12 +95,8 @@ const AudioButton = function(audioSource, label, id) {
     }
     return btn
 }
-const ImagePresentation = function(id, images) {
-    const presentation = {}
-    presentation.id = id
-    presentation.images = images
-    return presentation
-}
+
+
 
 // we follow a model:
 // ->  we won't have two identical named files with different labels!
@@ -134,6 +140,18 @@ var vueButtons = new Vue({
     }
 })
 
+// include the button tags for the NOW generated buttons:
+buttons.forEach((each) => { each.setTag() })
+// setting events for the buttons:
+
+for (button of buttons) {
+    button.getTag().addEventListener('click', function() {
+        // given that we don't modify the array:
+        audioPlayer.loadAudio(button)
+    })
+}
+
+// console.log(settingsObject)
 
 /*
             ██ ███    ███  █████   ██████  ███████ ███████
@@ -143,6 +161,57 @@ var vueButtons = new Vue({
             ██ ██      ██ ██   ██  ██████  ███████ ███████
 */
 
+// The next one is a Singleton gallery with presentations for each button
+
+const ImagesGallery = (function() {
+    var instance
+
+    function createInstance() { // called only once during the execution
+        const gallery = {}
+        // fields and members:
+        gallery.img = document.querySelector("#pictureDiv img")
+        gallery.setPicture = function(src) {
+            let timer = 0
+            let interval = setInterval(function() {
+                timer += 16
+                gallery.img.style.top = `${1.618 * (timer / 618) * 100}%`
+            }, 16);
+            setTimeout(function() {
+                gallery.img.src = src
+                gallery.img.style.top = `${-1.618 * (timer / 618) * 100}%`
+                window.clearInterval(interval)
+                interval = setInterval(function() {
+                    timer -= 16
+                    gallery.img.style.top = `${-1.618 * (timer / 618) * 100}%`
+                }, 16);
+            }, 618)
+            setTimeout(function() {
+                window.clearInterval(interval)
+                gallery.img.style.top = `0px`
+            }, 1236)
+        }
+        return gallery
+    }
+    return {
+        getInstance: function() {
+            if (!instance) {
+                instance = createInstance()
+            }
+            return instance
+        }
+    }
+})()
+
+gallery = ImagesGallery.getInstance()
+setTimeout(function() {
+    gallery.setPicture("images/animalsd0.jpg")
+}, 1000)
+
+
+console.log(ImagesGallery.getInstance())
+
+// TODO  model: the rule is that each filenames has associated images,
+// named by uding the filename and numbered 0, ...
 
 function generatePresentations(filenames) {
     const base_dir = './images/'
@@ -197,95 +266,289 @@ console.log(presentations)
 */
 
 window.addEventListener('load', function() {
-    setTimeout(function () {
-        document.getElementById('audio-player').classList.add('active')
+    setTimeout(function() {
+        // document.getElementById('audio-player').classList.add('active')
     }, 618);
 
 })
 
+const AudioPlayer = (function() {
+    var instance
+    const firstInstance = function() {
+        const instance = {}
+        instance.audio = document.querySelector('audio')
+        instance.sections = null
+        instance.loadAudio = function(button) {
+            // this should partition the audio, and save info about this,
+            // then load the audio and ready it for playing (if autoplaying, just play)
+            instance.audio.src = `./audios/${button.getSource()}.mp3`
+            instance.audio.load()
+            var audioScroll = document.getElementById('audio-scroll')
+            audioScroll.style.width = '4px'
+
+            console.log(instance.audio)
+        }
+        instance.setSection = function(start, end) {
+
+        }
+        instance.play = function() {
+            instance.audio.play()
+            // because nothing will happend before 2 seconds have passed
+            var audioScroll = document.getElementById('audio-scroll')
+            window.setTimeout(
+                () => {
+                    instance.sections = Math.ceil(instance.audio.duration)
+                    let section = Math.ceil(instance.audio.currentTime)
+                    audioScroll.style.width = `calc(${section / instance.sections} * 100%)`
+                    console.log("NOW")
+                    instance.interval = window.setInterval(
+                        () => {
+                            let section = Math.ceil(instance.audio.currentTime)
+                            audioScroll.style.width = `calc(${section / instance.sections} * 100%)`
+                            console.log("NOW")
+                        }, 1000)
+                }, 1000)
+
+            // document.querySelector('audio').play()
+            document.querySelector('#audio-player').classList.add('active')
+        }
+        instance.stop = function() {
+            instance.audio.pause()
+            window.clearInterval(instance.interval)
+            document.querySelector('#audio-player').classList.remove('active')
+            // set the currentTime according to the 3-seconds stuff
+        }
+        return instance
+    }
+    return {
+        getInstance: function() {
+            if (!instance) {
+                instance = firstInstance()
+            }
+            return instance
+        }
+    }
+})()
+
+var audioPlayer = AudioPlayer.getInstance()
+setTimeout(() => {audioPlayer.loadAudio(buttons[0])
+                  audioPlayer.play()}, 3000)
+setTimeout(() => {audioPlayer.stop()}, 15000)
+
+// events (play button), and key event (space, left, right):
 
 
 
+/*
+██████   ██████   ██████ ███████
+██   ██ ██    ██ ██      ██
+██   ██ ██    ██ ██      ███████
+██   ██ ██    ██ ██           ██
+██████   ██████   ██████ ███████
+*/
+
+const Docs = (function() {
+    var instance
+
+    function createInstance() {
+        const docs = {}
+        docs.docsBoard = document.createElement('div')
+        docs.docsBoard.id = 'docs-board'
+        docs.show = function() {
+            let dash = docs.docsBoard
+            dash.style.left = '-100%'
+            document.body.appendChild(docs.docsBoard)
+            // include the html from a GET request:
+            dash.innerHTML = '<iframe src="./docs/index.html" style="width:calc(100% - 4px); height: 100%"></iframe>'
+            // TODO  simply importing from HTML request, not using iframe
+            // dash.setAttribute('w3-include-html', './docs/docs.html');
+            // file = dash.getAttribute('w3-include-html')
+            // if (file) { // TODO  redundancy here, because the code must be restructured
+            //     /* Make an HTTP request using the attribute value as the file name: */
+            //     xhttp = new XMLHttpRequest();
+            //     xhttp.onreadystatechange = function() {
+            //         if (this.readyState == 4) {
+            //             if (this.status == 200) {
+            //                 // dash.innerHTML = this.responseText;
+            //             }
+            //             if (this.status == 404) {
+            //                 // dash.innerHTML = "Page not found.";
+            //             }
+            //             /* Remove the attribute: */
+            //             // dash.removeAttribute("w3-include-html");
+            //         }
+            //     }
+            //     xhttp.open("GET", file, true);
+            //     xhttp.send();
+            //     /* Exit the function: */
+            //     return;
+            // }
+            // now we decrease the size of the app page:
+            let page = document.body
+            let outerTimer = 0
+            let decrease = function() {
+                outerTimer += 16
+                // document.body.style.width = '90%'
+                page.style.boxShadow = '-3px 0px 7px 0px black' // TODO  styling
+                page.style.marginLeft = `calc(5% + ${outerTimer / 382 * 2.5}%)`
+                page.style.marginTop = `calc(5% + ${outerTimer / 382 * 2.5}%)`
+                page.style.width = `calc(90% - ${outerTimer / 382 * 5}%)`
+                page.style.height = `calc(90% - ${outerTimer / 382 * 5}%)`
+            }
+            var interval = window.setInterval(decrease, 8)
+            setTimeout(function() {
+                // close the previous interval:
+                window.clearInterval(interval)
+                // animate the entering of the docsBoard
+                let timer = 0
+                var docsInterval = window.setInterval(function() {
+                    timer += 16
+                    dash.style.left = `-${100 - (timer / 618) * 100}%`
+                }, 16)
+                window.setTimeout(function() {
+                    dash.style.left = '0px'
+                    window.clearInterval(docsInterval)
+                }, 618)
+            }, 382)
+        }
+        docs.hide = function() {
+            let dash = docs.docsBoard
+            let timer = 0
+            let interval = window.setInterval(function() {
+                timer += 16
+                dash.style.left = `-${100 - (1 - timer / 618) * 100}%`
+            }, 16)
+            setTimeout(function() {
+                window.clearInterval(interval)
+                dash.style.left = '-100%'
+                document.body.removeChild(docs.docsBoard)
+            }, 618)
+            // now we increase the size of the app window:
+            var page = document.body
+            let outerTimer = 0
+            let increase = function() {
+                outerTimer += 16
+                // boxShadow?
+                page.style.marginLeft = `calc(7.5% - ${outerTimer / 382 * 2.5}%)`
+                page.style.marginTop = `calc(7.5% - ${outerTimer / 382 * 2.5}%)`
+                page.style.width = `calc(85% + ${outerTimer / 382 * 5}%)`
+                page.style.height = `calc(85% + ${outerTimer / 382 * 5}%)`
+            }
+            window.setTimeout(function() {
+                // for reincreasing the app page
+                let interval = window.setInterval(increase, 8)
+                window.setTimeout(function() {
+                    // close the previous intervals:
+                    window.clearInterval(interval)
+                    // and get the window to the default (CSS) size
+                    page.style.boxShadow = ''
+                    page.style.width = ''
+                    page.style.height = ''
+                    page.style.marginLeft = ''
+                    page.style.marginTop = ''
+                }, 382)
+            }, 618)
+
+        }
+        return docs
+    }
+    return {
+        getInstance: function() {
+            if (!instance) {
+                instance = createInstance()
+            }
+            return instance
+        }
+    }
+})()
+
+// var docs = Docs.getInstance()
+// console.log(docs)
+// //
+// window.setTimeout(docs.show, 3236)
+// window.setTimeout(docs.hide, 5000)
 
 /*
  * after generating the buttons, we choose the first one to be loaded
  *   as default,
  */
-// (*1) this should correspond with the focused element :)
-// TODO  create a variable for the current playing file. create the events and matching classes necessary to add interactivity
-var startup_audio = 'bathroom'; // this is the choice
-var startup_label = new Vue({
-    el: '#audio_label',
-    data: {
-        label: labels[startup_audio]
-    }
-});
 
-
-
-/*
- * and now we add functionality to the buttons :)
- */
-var audioTag = document.querySelector('audio');
-var audioLabel = document.getElementById('audio_label');
-
-function loadAudio(index, autoplay = true) {
-    // (!) this section must be modified if you upload multiple audio formats (such as .mp3, .mp3, .ogg)
-    audioTag.children[0].src = './audios/' + filenames[index] + '.mp3';
-    audioTag.load();
-    audioLabel.innerHTML = labels[filenames[index]];
-    // here we make other stuff, like focusing on the audio and loading the corresponding image
-    const image = document.getElementsByTagName('img')[0];
-    image.src = `./images/${filenames[index]}.jpg`;
-    audioTag.click();
-    setTimeout(function() {
-        audioTag.focus();
-        if (autoplay)
-            audioTag.play();
-    }, 382);
-}
+ // TODO  reenter the default button:
+// // (*1) this should correspond with the focused element :)
+// // TODO  create a variable for the current playing file. create the events and matching classes necessary to add interactivity
+// var startup_audio = 'bathroom'; // this is the choice
+// var startup_label = new Vue({
+//     el: '#audio_label',
+//     data: {
+//         label: labels[startup_audio]
+//     }
+// });
 //
-buttons = document.getElementsByTagName('button');
-for (let i = 0; i < buttons.length; i++) {
-    buttons[i].setAttribute('onclick', `loadAudio(${i})`);
-}
-
-window.addEventListener('load', function() {
-    // final script, they might just be about styling :D
-    function postScriptum(buttonsToScroll) {
-        var btnGroup = document.getElementsByClassName('btn-group')[0];
-        // TODO: here we can do a function to find a certain element on which to fucus (*1)
-        btnGroup.scrollBy(0, 42 + buttonsToScroll * 36);
-    }
-    // TODO  next one:
-    //postScriptum(filenames.indexOf(startup_audio)); // we get into sight, and highlight (TODO), the fourth element
-    // load the startup audio:
-    loadAudio(0, false);
-
-    setTimeout(function() {
-            document.getElementsByTagName('audio')[0].focus();
-        },
-        382
-    );
-
-    // TODO  ???? what about this?
-    //document.getElementsByTagName('audio')[0].autoplay = true;
-});
-
-
-
-
-
-/*
-// autoplay audiofile after audiofile
-document.getElementsByTagName('audio')[0].onended = function() {
-
-	// very in work
-	alert('loading the next section in 5 seconds');
-	setTimeout(function(){
-
-loadAudio(3)}, 5000); // TODO  replace this with the next item, if there is one
-} */
+//
+//
+// /*
+//  * and now we add functionality to the buttons :)
+//  */
+// var audioTag = document.querySelector('audio');
+// var audioLabel = document.getElementById('audio_label');
+//
+// function loadAudio(index, autoplay = true) {
+//     // (!) this section must be modified if you upload multiple audio formats (such as .mp3, .mp3, .ogg)
+//     audioTag.children[0].src = './audios/' + filenames[index] + '.mp3';
+//     audioTag.load();
+//     audioLabel.innerHTML = labels[filenames[index]];
+//     // here we make other stuff, like focusing on the audio and loading the corresponding image
+//     const image = document.getElementsByTagName('img')[0];
+//     image.src = `./images/${filenames[index]}.jpg`;
+//     audioTag.click();
+//     setTimeout(function() {
+//         audioTag.focus();
+//         if (autoplay)
+//             audioTag.play();
+//     }, 382);
+// }
+// //
+// buttons = document.getElementsByTagName('button');
+// for (let i = 0; i < buttons.length; i++) {
+//     buttons[i].setAttribute('onclick', `loadAudio(${i})`);
+// }
+//
+// window.addEventListener('load', function() {
+//     // final script, they might just be about styling :D
+//     function postScriptum(buttonsToScroll) {
+//         var btnGroup = document.getElementsByClassName('btn-group')[0];
+//         // TODO: here we can do a function to find a certain element on which to fucus (*1)
+//         btnGroup.scrollBy(0, 42 + buttonsToScroll * 36);
+//     }
+//     // TODO  next one:
+//     //postScriptum(filenames.indexOf(startup_audio)); // we get into sight, and highlight (TODO), the fourth element
+//     // load the startup audio:
+//     loadAudio(0, false);
+//
+//     setTimeout(function() {
+//             document.getElementsByTagName('audio')[0].focus();
+//         },
+//         382
+//     );
+//
+//     // TODO  ???? what about this?
+//     //document.getElementsByTagName('audio')[0].autoplay = true;
+// });
+//
+//
+//
+//
+//
+// /*
+// // autoplay audiofile after audiofile
+// document.getElementsByTagName('audio')[0].onended = function() {
+//
+// 	// very in work
+// 	alert('loading the next section in 5 seconds');
+// 	setTimeout(function(){
+//
+// loadAudio(3)}, 5000); // TODO  replace this with the next item, if there is one
+// } */
 
 var toggled = false;
 document.onkeydown = (e) => {
