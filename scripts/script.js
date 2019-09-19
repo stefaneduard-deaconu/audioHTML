@@ -394,6 +394,7 @@ const AudioPlayer = (function() {
             if (instance.audio.currentTime >= time) {
                 instance.audio.currentTime -= time
             } else {
+
                 // nothing, or show something red TODO TODO TODO
             }
         }
@@ -403,6 +404,7 @@ const AudioPlayer = (function() {
             } else {
                 // nothing, because it will just end very fast
                 // TODO  make it end right in this second :D
+                instance.stop()
             }
         }
         instance.volumeUp = function(percent) {
@@ -428,10 +430,14 @@ const AudioPlayer = (function() {
                     let sectionDuration = instance.audio.duration / instance.currPresentation.length
                     let imageId = Math.floor(instance.audio.currentTime / sectionDuration)
                     console.log(imageId)
-                    console.log(instance.currImageId)
-                    if (imageId != instance.currImageId) {
-                        imagesGallery.setImage(instance.currPresentation[imageId])
-                        instance.currImageId = imageId
+                    console.log(instance.currPresentation.length)
+                    if (imageId >= instance.currPresentation.length) {
+                        window.clearInterval(instance.presentationInterval)
+                    } else {
+                        if (imageId != instance.currImageId) {
+                            imagesGallery.setImage(instance.currPresentation[imageId])
+                            instance.currImageId = imageId
+                        }
                     }
                 }, 1000)
             instance.audio.play()
@@ -448,6 +454,11 @@ const AudioPlayer = (function() {
                             let section = Math.ceil(instance.audio.currentTime)
                             audioScroll.style.width = `calc(${section / instance.sections} * calc(100% - 30px))`
                             console.log("NOW")
+                            console.log(section / instance.sections)
+                            if (section / instance.sections == 1) {
+                                window.clearInterval(instance.interval)
+                                instance.interval = null
+                            }
                         }, 1000)
                 }, 1000)
 
