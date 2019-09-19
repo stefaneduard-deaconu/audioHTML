@@ -74,7 +74,7 @@ img {
 }
 #pictureDiv img {
 	width: 90%;
-	max-height: 61.8%;
+	max-height: 90%;
 	position: absolute;
 	/* display: inline-block; */
 }
