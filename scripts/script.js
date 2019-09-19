@@ -105,11 +105,15 @@ const AudioLibrary = (function() {
     var instance
 
     function createInstance() {
-        const library = { }
+        const library = {}
         library.filenames = JSON.parse(ipc.sendSync('send-filenames'))
         library.labels = JSON.parse(ipc.sendSync('send-labels'))
-        library.getFilenames = function() { return library.filenames }
-        library.getLabels = function() { return library.labels }
+        library.getFilenames = function() {
+            return library.filenames
+        }
+        library.getLabels = function() {
+            return library.labels
+        }
 
         // TODO: move all of this inside the AudioLibrary :D
         function generateButtons() {
@@ -130,7 +134,9 @@ const AudioLibrary = (function() {
             return btns
         }
         library.buttons = generateButtons()
-        library.getButtons = function() { return library.buttons }
+        library.getButtons = function() {
+            return library.buttons
+        }
 
         return library
     }
@@ -209,6 +215,7 @@ for (button of audioLibrary.getButtons()) {
 
 
 console.log(settingsObject)
+
 function generateControls() {
     let docsButton = document.createElement('button')
     docsButton.innerHTML = '<div>Docs</div>'
@@ -235,9 +242,9 @@ function generateControls() {
     document.body.appendChild(docsButton)
     document.body.appendChild(settingsButton)
     let buttonsStylesheet = document.createElement('link')
-    buttonsStylesheet.rel="stylesheet"
-    buttonsStylesheet.type="text/css"
-    buttonsStylesheet.href="./styles/buttons.css"
+    buttonsStylesheet.rel = "stylesheet"
+    buttonsStylesheet.type = "text/css"
+    buttonsStylesheet.href = "./styles/buttons.css"
     document.head.appendChild(buttonsStylesheet)
 }
 generateControls()
@@ -288,7 +295,9 @@ const ImagesGallery = (function() {
             return presentations
         }
         gallery.presentations = generatePresentations()
-        gallery.getPresentations = function() { return gallery.presentations }
+        gallery.getPresentations = function() {
+            return gallery.presentations
+        }
         gallery.setImage = function(filename) {
             gallery.img.style.minWidth = gallery.img.style.minHeight = ''
             gallery.img.style.position = ''
@@ -359,6 +368,7 @@ const AudioPlayer = (function() {
         instance.isActive = false
         instance.sections = null
         instance.currPresentation = null
+        instance.currImageId = null
         instance.loadAudio = function(button) {
             console.log(button)
             // we clean from the last "loading":
@@ -375,6 +385,7 @@ const AudioPlayer = (function() {
             console.log(imagesGallery.getPresentations()[0]);
             instance.currPresentation = imagesGallery.getPresentations()[button.getId()]
             imagesGallery.setImage(instance.currPresentation[0]) // at least one image per presentation
+            instance.currImageId = 0
         }
         instance.setSection = function(start, end) {
             // TODO
@@ -383,6 +394,7 @@ const AudioPlayer = (function() {
             if (instance.audio.currentTime >= time) {
                 instance.audio.currentTime -= time
             } else {
+
                 // nothing, or show something red TODO TODO TODO
             }
         }
@@ -392,9 +404,42 @@ const AudioPlayer = (function() {
             } else {
                 // nothing, because it will just end very fast
                 // TODO  make it end right in this second :D
+                instance.stop()
             }
         }
+        instance.volumeUp = function(percent) {
+            if (instance.audio.volume + percent <= 1) {
+                instance.audio.volume += percent
+            } else {
+                instance.audio.volume = 1
+            }
+            document.getElementById('volume-bar').style.height = `calc(${instance.audio.volume} * 24px)`
+        }
+        instance.volumeDown = function(percent) {
+            if (instance.audio.volume - percent >= 0) {
+                instance.audio.volume -= percent
+            } else {
+                instance.audio.volume = 0
+            }
+            document.getElementById('volume-bar').style.height = `calc(${instance.audio.volume} * 24px)`
+        }
+        instance.presentationInterval = null
         instance.play = function() {
+            instance.presentationInterval = window.setInterval(
+                function() {
+                    let sectionDuration = instance.audio.duration / instance.currPresentation.length
+                    let imageId = Math.floor(instance.audio.currentTime / sectionDuration)
+                    console.log(imageId)
+                    console.log(instance.currPresentation.length)
+                    if (imageId >= instance.currPresentation.length) {
+                        window.clearInterval(instance.presentationInterval)
+                    } else {
+                        if (imageId != instance.currImageId) {
+                            imagesGallery.setImage(instance.currPresentation[imageId])
+                            instance.currImageId = imageId
+                        }
+                    }
+                }, 1000)
             instance.audio.play()
             // because nothing will happend before 2 seconds have passed
             var audioScroll = document.getElementById('audio-scroll')
@@ -407,8 +452,13 @@ const AudioPlayer = (function() {
                     instance.interval = window.setInterval(
                         () => {
                             let section = Math.ceil(instance.audio.currentTime)
-                            audioScroll.style.width = `calc(${section / instance.sections} * 100%)`
+                            audioScroll.style.width = `calc(${section / instance.sections} * calc(100% - 30px))`
                             console.log("NOW")
+                            console.log(section / instance.sections)
+                            if (section / instance.sections == 1) {
+                                window.clearInterval(instance.interval)
+                                instance.interval = null
+                            }
                         }, 1000)
                 }, 1000)
 
@@ -417,6 +467,7 @@ const AudioPlayer = (function() {
             instance.isActive = true
         }
         instance.stop = function() {
+            window.clearInterval(instance.presentationInterval)
             instance.audio.pause()
             window.clearInterval(instance.interval)
             document.querySelector('#audio-player').classList.remove('active')
@@ -436,13 +487,13 @@ const AudioPlayer = (function() {
 })()
 
 var audioPlayer = AudioPlayer.getInstance()
-setTimeout(() => {
-    audioPlayer.loadAudio(audioLibrary.getButtons()[0])
-    audioPlayer.play()
-}, 3000)
-setTimeout(() => {
-    audioPlayer.stop()
-}, 15000)
+// setTimeout(() => {
+//     audioPlayer.loadAudio(audioLibrary.getButtons()[0])
+//     audioPlayer.play()
+// }, 3000)
+// setTimeout(() => {
+//     audioPlayer.stop()
+// }, 15000)
 
 // events (play button), and key event (space, left, right):
 
@@ -453,6 +504,15 @@ setTimeout(() => {
 ██   ██ ██    ██     ██       ██  ██  ██      ██  ██ ██    ██         ██
 ██   ██  ██████      ███████   ████   ███████ ██   ████    ██    ███████
 */
+
+// play-button event:
+document.getElementById('play-button').addEventListener('click', function(event) {
+    if (audioPlayer.isActive) {
+        audioPlayer.stop()
+    } else {
+        audioPlayer.play()
+    }
+})
 
 // the main event that tests every single combination of key presses we model
 //  our application around
@@ -472,8 +532,8 @@ document.addEventListener('keydown', (event) => {
         // we control the usage of the Audio
         switch (event.key) {
             case ' ':
-            event.preventDefault() // for not pressing the same button again and again
-            console.log('HERE')
+                event.preventDefault() // for not pressing the same button again and again
+                console.log('HERE')
                 if (audioPlayer.isActive == true)
                     audioPlayer.stop()
                 else {
@@ -488,6 +548,22 @@ document.addEventListener('keydown', (event) => {
                         time = 0.3
                     audioPlayer.derulateLeft(time)
                 }
+                break
+            case 'ArrowUp':
+                // if (audioPlayer.isActive == true) {
+                    percent = 0.01
+                    if (keydownTimer > 25)
+                        percent = 0.05
+                    audioPlayer.volumeUp(percent)
+                // }
+                break
+            case 'ArrowDown':
+                // if (audioPlayer.isActive == true) {
+                    percent = 0.01
+                    if (keydownTimer > 25)
+                        percent = 0.05
+                    audioPlayer.volumeDown(percent)
+                // }
                 break
             case 'ArrowRight':
                 if (audioPlayer.isActive == true) {
@@ -533,7 +609,9 @@ const Docs = (function() {
         docs.docsBoard = document.createElement('div')
         docs.docsBoard.id = 'docs-board'
         docs.isShown = false
-        docs.getShown = function() { return docs.isShown }
+        docs.getShown = function() {
+            return docs.isShown
+        }
         docs.show = function() {
             docs.isShown = true
             let dash = docs.docsBoard
@@ -644,9 +722,7 @@ const Docs = (function() {
 })()
 
 var docs = Docs.getInstance()
-// console.log(docs)
-// //
-// window.setTimeout(docs.show, 3236)
+// window.setTimeout(docs.show, 1000)
 // window.setTimeout(docs.hide, 5000)
 
 /*

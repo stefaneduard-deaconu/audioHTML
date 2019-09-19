@@ -47,6 +47,7 @@
 
 
 #audio-player:not(.active) #audio-bar {
+	transition: width 0.618s;
 	margin: 15px;
 	margin-left: calc(5% + 0px);
 	margin-right: auto;
@@ -60,6 +61,7 @@
 	/* paddin for the start button: */
 }
 #audio-player.active #audio-bar {
+	transition: width 0.618s;
 	margin: 15px;
 	margin-left: calc(5% + 0px);
 	margin-right: auto;
@@ -81,6 +83,7 @@
 	z-index: 3;
 	position: absolute;
 	left: 0px;
+	top: 0px;
 	/* margin: 15px;
 	margin-left: 5%; */
 	/*  */
@@ -105,13 +108,13 @@
 }
 
 #audio-player:not(.active) #audio-bar:hover {
-	width: calc(66.8% - 40px);
-	padding-left: 40px;
+	width: calc(66.8% - 80px);
+	padding-left: 80px;
 	margin-left: calc(5% + 0px);
 }
 #audio-player.active #audio-bar:hover {
-	width: calc(90% - 40px);
-	padding-left: 40px;
+	width: calc(90% - 80px);
+	padding-left: 80px;
 	margin-left: calc(5% + 0px);
 }
 #audio-bar:hover #audio-scroll {
@@ -135,7 +138,7 @@
 	left: 11px;
 }
 #audio-bar:hover #section-start {
-	left: 40px;
+	left: 80px;
 }
 
 #audio-bar #audio-scroll {
@@ -200,20 +203,105 @@
 
 /* We could undertand the last .section-c.. as an "existential if" */
 #audio-bar div:hover .section-circle {
-	width: 30px;
-	height: 60px;
+	width: 8px;
+	height: 18px;
 	position: absolute;
-	top: -15px;
+	top: 6px;
+	left: 11px;
 	opacity: 1;
 	background-color: black;
 /*  */
 	border-style: solid;
-	border-width: 15px;
+	/* border-width: 15px; */
 	border-color: black white black white;
-	border-width: 30px 15px 30px 15px;
+	border-width: 9px 4px 9px 4px;
 	box-sizing: border-box;
 
-	border-radius: 15px 15px 15px 15px
-	border: 1px solid black;
+	border-radius: 5px;
+	/* border: 1px solid black; */
 
+}
+/* volume bar */
+
+#audio-player #volume-button {
+	display: none;
+	position: absolute;
+}
+#audio-player:hover #volume-button {
+	display: inline-block;
+	position: absolute;
+	left: 40px;
+	top: 0px;
+	z-index: 3;
+	width: 29px;
+	height: 29px;
+	border-radius: 30px;
+	background-color: black;
+	opacity: 0.618;
+	border: 1px solid white;
+}
+#audio-player #volume-button>#volume-bar {
+	position: absolute;
+	left: 13px;
+	bottom: 4px;
+	z-index: 5;
+	width: 4px;
+	border-radius: 4px;
+	height: calc(0.618 * 24px);
+	background-color: white;/*rgb(2, 200, 259); */
+	opacity: 1;
+}
+/* #audio-player:hover #volume-button:hover #volume-bar{
+	content: 'vol';
+	z-index: 99;
+	display: inline-block;
+	position: relative;
+	width: 30px;
+	height: 20px;
+	border-radius: 3px;
+	border: inset 1px solid grey;
+	background-color: white;
+	opacity: 1;
+} */
+
+
+
+
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
 }
