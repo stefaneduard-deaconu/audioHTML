@@ -101,36 +101,71 @@ const AudioButton = function(audioSource, label, id) {
 // we follow a model:
 // ->  we won't have two identical named files with different labels!
 
-var filenames = JSON.parse(ipc.sendSync('send-filenames'))
-var labels = JSON.parse(ipc.sendSync('send-labels'))
+const AudioLibrary = (function() {
+    var instance
 
+    function createInstance() {
+        const library = { }
+        library.filenames = JSON.parse(ipc.sendSync('send-filenames'))
+        library.labels = JSON.parse(ipc.sendSync('send-labels'))
+        library.getFilenames = function() { return library.filenames }
+        library.getLabels = function() { return library.labels }
 
-function generateButtons(filenames, labels) {
-    let btns = []
-    // we create teh btn's, by using the labels as the explicit ones
-    //   and using undefined for the default ones
-    for (let i = 0; i < filenames.length; i++)
-        btns.push(AudioButton(filenames[i], labels[filenames[i]], i));
-    // now we set the default labels for the remaining buttons
-    btns.forEach((btn) => {
-        if (btn.getLabel() == undefined) {
-            btn.setLabel(
-                toLabel(btn.audioSource)
-            )
-            labels[btn.filename] = btn.getLabel;
+        // TODO: move all of this inside the AudioLibrary :D
+        function generateButtons() {
+            let btns = []
+            // we create teh btn's, by using the labels as the explicit ones
+            //   and using undefined for the default ones
+            for (let i = 0; i < library.filenames.length; i++)
+                btns.push(AudioButton(library.filenames[i], library.labels[library.filenames[i]], i));
+            // now we set the default labels for the remaining buttons
+            btns.forEach((btn) => {
+                if (btn.getLabel() == undefined) {
+                    btn.setLabel(
+                        toLabel(btn.audioSource)
+                    )
+                    library.labels[btn.filename] = btn.getLabel;
+                }
+            })
+            return btns
         }
-    })
-    return btns
-}
+        library.buttons = generateButtons()
+        library.getButtons = function() { return library.buttons }
 
-var buttons = generateButtons(filenames, labels)
+        return library
+    }
 
+    return {
+        getInstance: function() {
+            if (!instance) {
+                instance = createInstance()
+            }
+            return instance
+        }
+    }
+})()
+
+audioLibrary = AudioLibrary.getInstance()
+console.log(audioLibrary)
+
+// var filenames = JSON.parse(ipc.sendSync('send-filenames'))
+// var labels = JSON.parse(ipc.sendSync('send-labels'))
+
+
+
+/*
+        ██    ██ ██    ██ ███████      ██████  ██████       ██ ███████
+        ██    ██ ██    ██ ██          ██    ██ ██   ██      ██ ██
+        ██    ██ ██    ██ █████       ██    ██ ██████       ██ ███████
+         ██  ██  ██    ██ ██          ██    ██ ██   ██ ██   ██      ██
+          ████    ██████  ███████      ██████  ██████   █████  ███████
+*/
 // generate the Vue object used for generating the buttons:
 let btns_data = []
-for (let i = 0; i < buttons.length; i++) {
+for (let i = 0; i < audioLibrary.getButtons().length; i++) {
     btns_data.push({
-        'id': buttons[i].getId(),
-        'label': buttons[i].getLabel()
+        'id': audioLibrary.getButtons()[i].getId(),
+        'label': audioLibrary.getButtons()[i].getLabel()
     })
 }
 var vueButtons = new Vue({
@@ -140,18 +175,72 @@ var vueButtons = new Vue({
     }
 })
 
+// after generating the buttons, we can add the tag references to them:
 // include the button tags for the NOW generated buttons:
-buttons.forEach((each) => { each.setTag() })
-// setting events for the buttons:
+audioLibrary.getButtons().forEach((each) => {
+    each.setTag()
+})
 
-for (button of buttons) {
-    button.getTag().addEventListener('click', function() {
-        // given that we don't modify the array:
-        audioPlayer.loadAudio(button)
+// setting events for the buttons:
+for (button of audioLibrary.getButtons()) {
+    let btn = Object.assign({}, button)
+    btn.getTag().addEventListener('click', function() {
+        audioPlayer.loadAudio(btn) // TODO add settings for this button!!!
+        audioPlayer.play()
     })
 }
 
-// console.log(settingsObject)
+/*
+██████   █████   ██████  ███████     ██████  ████████ ███    ██ ███████
+██   ██ ██   ██ ██       ██          ██   ██    ██    ████   ██ ██
+██████  ███████ ██   ███ █████       ██████     ██    ██ ██  ██ ███████
+██      ██   ██ ██    ██ ██          ██   ██    ██    ██  ██ ██      ██  ██
+██      ██   ██  ██████  ███████     ██████     ██    ██   ████ ███████   █
+                                                                         █
+*/
+/*
+███████ ███████ ████████ ████████ ██ ███    ██  ██████  ███████
+██      ██         ██       ██    ██ ████   ██ ██       ██
+███████ █████      ██       ██    ██ ██ ██  ██ ██   ███ ███████
+     ██ ██         ██       ██    ██ ██  ██ ██ ██    ██      ██
+███████ ███████    ██       ██    ██ ██   ████  ██████  ███████
+*/
+
+
+
+console.log(settingsObject)
+function generateControls() {
+    let docsButton = document.createElement('button')
+    docsButton.innerHTML = '<div>Docs</div>'
+    docsButton.id = 'docs-button'
+    docsButton.onclick = function() {
+        if (docs.getShown() == false) {
+            docs.show()
+        } else {
+            docs.hide()
+        }
+    }
+
+    let settingsButton = document.createElement('button')
+    settingsButton.innerHTML = '<div>Settings</div>'
+    settingsButton.id = 'settings-button'
+    settingsButton.onclick = function() {
+        // if (settings.getShown() == false) {
+        //     settings.show()
+        // } else {
+        //     settings.hide()
+        // }
+    }
+
+    document.body.appendChild(docsButton)
+    document.body.appendChild(settingsButton)
+    let buttonsStylesheet = document.createElement('link')
+    buttonsStylesheet.rel="stylesheet"
+    buttonsStylesheet.type="text/css"
+    buttonsStylesheet.href="./styles/buttons.css"
+    document.head.appendChild(buttonsStylesheet)
+}
+generateControls()
 
 /*
             ██ ███    ███  █████   ██████  ███████ ███████
@@ -170,14 +259,47 @@ const ImagesGallery = (function() {
         const gallery = {}
         // fields and members:
         gallery.img = document.querySelector("#pictureDiv img")
-        gallery.setPicture = function(src) {
+        // TODO  model: the rule is that each audioLIbrary.filenames has associated images,
+        // named by uding the filename and numbered 0, ...
+        function generatePresentations() {
+            const base_dir = './images/'
+            presentations = []
+            for (fn of audioLibrary.getFilenames()) {
+                base_fn = base_dir + fn
+                images = []
+                toContinue = true
+                for (number = 0; toContinue && number < 3; number++) {
+                    complete_path_to_file = `${base_fn}${number}.jpg`
+                    // Synchronous method
+                    try {
+                        // TODO  this enxt part doesn't allow for a dynamic image extension
+                        if (fs.existsSync(complete_path_to_file)) {
+                            //file exists
+                            images.push(fn + number + '.jpg')
+                        } else {
+                            toContinue = false
+                        }
+                    } catch (err) {
+                        console.error(err)
+                    }
+                }
+                presentations.push(images)
+            }
+            return presentations
+        }
+        gallery.presentations = generatePresentations()
+        gallery.getPresentations = function() { return gallery.presentations }
+        gallery.setImage = function(filename) {
+            gallery.img.style.minWidth = gallery.img.style.minHeight = ''
+            gallery.img.style.position = ''
+            gallery.img.style.top = gallery.img.style.left = ''
             let timer = 0
             let interval = setInterval(function() {
                 timer += 16
                 gallery.img.style.top = `${1.618 * (timer / 618) * 100}%`
             }, 16);
             setTimeout(function() {
-                gallery.img.src = src
+                gallery.img.src = `images/${filename}`
                 gallery.img.style.top = `${-1.618 * (timer / 618) * 100}%`
                 window.clearInterval(interval)
                 interval = setInterval(function() {
@@ -202,58 +324,15 @@ const ImagesGallery = (function() {
     }
 })()
 
-gallery = ImagesGallery.getInstance()
-setTimeout(function() {
-    gallery.setPicture("images/animalsd0.jpg")
-}, 1000)
+imagesGallery = ImagesGallery.getInstance()
+// setTimeout(function() {
+//     imagesGallery.setImage("_grey.jpg")
+// }, 1000)
+//
+//
+// console.log(ImagesGallery.getInstance())
 
 
-console.log(ImagesGallery.getInstance())
-
-// TODO  model: the rule is that each filenames has associated images,
-// named by uding the filename and numbered 0, ...
-
-function generatePresentations(filenames) {
-    const base_dir = './images/'
-    presentations = []
-    for (fn of filenames) {
-        base_fn = base_dir + fn
-        images = []
-        toContinue = true
-        for (number = 0; toContinue && number < 3; number++) {
-            complete_path_to_file = `${base_fn}${number}.jpg`
-            // Synchronous method
-            try {
-                // TODO  this enxt part doesn't allow for a dynamic image extension
-                if (fs.existsSync(complete_path_to_file)) {
-                    //file exists
-                    images.push(fn + number + '.jpg')
-                } else {
-                    toContinue = false
-                }
-            } catch (err) {
-                console.error(err)
-            }
-            // The next method is asynchronous
-            // console.log(complete_path_to_file)
-            // fs.access(complete_path_to_file, fs.F_OK, (err) => {
-            //     if (err) {
-            //         // BUG GY
-            //         // console.error(err)
-            //         toContinue = false
-            //         return
-            //     }
-            //     //file exists
-            //     console.log(complete_path_to_file)
-            //     images.push(fn + number + '.jpg')
-            // })
-        }
-        presentations.push(images)
-    }
-    return presentations
-}
-var presentations = generatePresentations(filenames)
-console.log(presentations)
 
 
 
@@ -277,19 +356,43 @@ const AudioPlayer = (function() {
     const firstInstance = function() {
         const instance = {}
         instance.audio = document.querySelector('audio')
+        instance.isActive = false
         instance.sections = null
+        instance.currPresentation = null
         instance.loadAudio = function(button) {
+            console.log(button)
+            // we clean from the last "loading":
+            instance.currPresentation = null // unnecessary !!!
             // this should partition the audio, and save info about this,
             // then load the audio and ready it for playing (if autoplaying, just play)
             instance.audio.src = `./audios/${button.getSource()}.mp3`
             instance.audio.load()
             var audioScroll = document.getElementById('audio-scroll')
             audioScroll.style.width = '4px'
-
-            console.log(instance.audio)
+            // also set the image for the gallery:
+            // we find the required image (find sections, then choose the right one:)
+            console.log(button.getId())
+            console.log(imagesGallery.getPresentations()[0]);
+            instance.currPresentation = imagesGallery.getPresentations()[button.getId()]
+            imagesGallery.setImage(instance.currPresentation[0]) // at least one image per presentation
         }
         instance.setSection = function(start, end) {
-
+            // TODO
+        }
+        instance.derulateLeft = function(time = 1) {
+            if (instance.audio.currentTime >= time) {
+                instance.audio.currentTime -= time
+            } else {
+                // nothing, or show something red TODO TODO TODO
+            }
+        }
+        instance.derulateRight = function(time = 1) {
+            if (instance.audio.currentTime <= instance.audio.duration - time) {
+                instance.audio.currentTime += time
+            } else {
+                // nothing, because it will just end very fast
+                // TODO  make it end right in this second :D
+            }
         }
         instance.play = function() {
             instance.audio.play()
@@ -311,11 +414,13 @@ const AudioPlayer = (function() {
 
             // document.querySelector('audio').play()
             document.querySelector('#audio-player').classList.add('active')
+            instance.isActive = true
         }
         instance.stop = function() {
             instance.audio.pause()
             window.clearInterval(instance.interval)
             document.querySelector('#audio-player').classList.remove('active')
+            instance.isActive = false
             // set the currentTime according to the 3-seconds stuff
         }
         return instance
@@ -331,13 +436,86 @@ const AudioPlayer = (function() {
 })()
 
 var audioPlayer = AudioPlayer.getInstance()
-setTimeout(() => {audioPlayer.loadAudio(buttons[0])
-                  audioPlayer.play()}, 3000)
-setTimeout(() => {audioPlayer.stop()}, 15000)
+setTimeout(() => {
+    audioPlayer.loadAudio(audioLibrary.getButtons()[0])
+    audioPlayer.play()
+}, 3000)
+setTimeout(() => {
+    audioPlayer.stop()
+}, 15000)
 
 // events (play button), and key event (space, left, right):
 
+/*
+ █████  ██    ██     ███████ ██    ██ ███████ ███    ██ ████████ ███████
+██   ██ ██    ██     ██      ██    ██ ██      ████   ██    ██    ██
+███████ ██    ██     █████   ██    ██ █████   ██ ██  ██    ██    ███████
+██   ██ ██    ██     ██       ██  ██  ██      ██  ██ ██    ██         ██
+██   ██  ██████      ███████   ████   ███████ ██   ████    ██    ███████
+*/
 
+// the main event that tests every single combination of key presses we model
+//  our application around
+var isKeydown = false
+var keydownTimer = 0
+document.addEventListener('keyup', (event) => {
+    isKeydown = false
+    keydownTimer = 0
+})
+document.addEventListener('keydown', (event) => {
+    isKeydown = true
+    keydownTimer += 1
+    if (event.altKey || event.ctrlKey || event.shiftKey) {
+        // we control the pressing of the AudioButtons
+    } else {
+        console.log('-' + event.key + '-')
+        // we control the usage of the Audio
+        switch (event.key) {
+            case ' ':
+            event.preventDefault() // for not pressing the same button again and again
+            console.log('HERE')
+                if (audioPlayer.isActive == true)
+                    audioPlayer.stop()
+                else {
+                    audioPlayer.play()
+                }
+                break
+            case 'ArrowLeft':
+                // TODO: everytime the times hits a section, we play normally for a bit
+                if (audioPlayer.isActive == true) {
+                    time = 0.1
+                    if (keydownTimer > 30)
+                        time = 0.3
+                    audioPlayer.derulateLeft(time)
+                }
+                break
+            case 'ArrowRight':
+                if (audioPlayer.isActive == true) {
+                    time = 0.1
+                    if (keydownTimer > 30)
+                        time = 0.3
+                    audioPlayer.derulateRight(time)
+                }
+                break
+            default:
+                break
+
+        }
+        // TODO  we can't control the section part of the audio-player
+    }
+})
+
+
+document.querySelector('#audio-player #section-start')
+    .addEventListener('drag',
+        (event) => {
+
+        })
+document.querySelector('#audio-player #section-start')
+    .addEventListener('dragend',
+        (event) => {
+
+        })
 
 /*
 ██████   ██████   ██████ ███████
@@ -354,7 +532,10 @@ const Docs = (function() {
         const docs = {}
         docs.docsBoard = document.createElement('div')
         docs.docsBoard.id = 'docs-board'
+        docs.isShown = false
+        docs.getShown = function() { return docs.isShown }
         docs.show = function() {
+            docs.isShown = true
             let dash = docs.docsBoard
             dash.style.left = '-100%'
             document.body.appendChild(docs.docsBoard)
@@ -448,7 +629,7 @@ const Docs = (function() {
                     page.style.marginTop = ''
                 }, 382)
             }, 618)
-
+            docs.isShown = false
         }
         return docs
     }
@@ -462,7 +643,7 @@ const Docs = (function() {
     }
 })()
 
-// var docs = Docs.getInstance()
+var docs = Docs.getInstance()
 // console.log(docs)
 // //
 // window.setTimeout(docs.show, 3236)
@@ -473,7 +654,7 @@ const Docs = (function() {
  *   as default,
  */
 
- // TODO  reenter the default button:
+// TODO  reenter the default button:
 // // (*1) this should correspond with the focused element :)
 // // TODO  create a variable for the current playing file. create the events and matching classes necessary to add interactivity
 // var startup_audio = 'bathroom'; // this is the choice
@@ -550,61 +731,9 @@ const Docs = (function() {
 // loadAudio(3)}, 5000); // TODO  replace this with the next item, if there is one
 // } */
 
-var toggled = false;
-document.onkeydown = (e) => {
-    /* here we use spacebar for playing and pausing the audio
-    	function description:
-    */
-    const DOWN = 40,
-        UP = 38,
-        SPACEBAR = 32,
-        ENTER = 13;
-    key = e.keyCode;
-    //console.log(key);
-    // TODO  make the audio so that it is focused only when playing
-    if (key == SPACEBAR) { // whitespace :D
-        var isFocused = (document.activeElement === audioTag); // check for focus
-        if (!isFocused) {
-            audioTag.focus();
-            if (audioTag.duration > 0 && !audioTag.paused) { // it's playing ----> this will disappear, soon :)
-                audioTag.pause();
-            } else {
-                audioTag.play();
-            }
-        }
-        /*else { // we presume we just pause the audio, because it being focused means it is playing :D
-        	audioTag.pause();
-        	console.log('foc');
-        } */
-        //audioTag.dispatchEvent(new KeyboardEvent('keypress',{'keyCode':32, 'which':32}));
-    }
-    // else {
-    // 	if (key == DOWN) {
-    // 		console.log('down, next audio, just browsing');
-    // 		toggled = false
-    // 	}
-    // 	if (key == UP) {
-    // 		console.log('up, previous audio, just browsing');
-    // 		toggled = false
-    // 	}
-    // 	if (key == ENTER) {
-    //
-    // 		console.log('enter - load audio');
-    //
-    // 		if (toggled) {
-    // 			loadAudio(3);
-    // 			toggled = false;
-    // 		} else {
-    // 			document.getElementById('textDiv').innerHTML = 'Press again Enter to load next section';
-    // 			toggled = true;
-    // 		}
-    //
-    // 	}
-    // }
-};
-/*document.addEventListener('click', function() {
-	audioTag.pause();
-});*/
+
+
+
 
 // TODO  replace existing :focus CSS with one with .playing class, for easier control over everything
 
