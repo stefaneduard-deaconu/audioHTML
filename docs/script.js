@@ -1,0 +1,44 @@
+sections = {
+    'introduction': '<h1>An Introduction</h1> <p>We started this project to provide a simple, intuitive, and compelling audio dictionary, targeting Romanians of all ages and occupations, </p> <p> And we developed it further as the project for an university subject, MDS (Software Development Methods). For the better understanding of our project, I say we delve into the project requirements: </p> <ol> <li>Creating user stories and keeping a backlog</li> <li>UML design, pre-implementation</li> <li>Using git, including branches, merges/rebases.</li> <li>Automatic tests (unit or integration)</li> <li>Bug reporting</li> <li>Using a build tool</li> <li>Refactoring and code standards</li> <li>Design patterns</li> </ul>  <h5>1. User Stories and Backlog</h5> <p> The User stories, a backlog, and the current features can be found under the <span class="section">Design and Model</span> section. </p>  <h5>2. UML Design</h5> <p> The UML diagrams, both about the used classes and the processes and communication between them, can be found under the <span class="section">UML</span> section.</p>  <h5>3. Git Repo</h5> <p> The repository can be found at the GitHub user stefaneduard-deaconu, the audioHTML repository, the <i>mds</i> branch. </p> <p> We had a main project that we upgraded while pursuing a better grade, and a better UI and UX. Consequently, we have multiple branches: <i>mds</i>, branched off master, and <i>dev</i>, branched off mds. You can guess the meaning, <i>mds</i> was used for the upgrade, and <i>dev</i> for grouping multiple commits before introducing a working feature.  </p>  <h5>4. Tests</h5> <p> For automatic testing we used the Spectron and Mocha node.js modules. More about this under the <span class="section">Testing</span> section. </p>  <h5>5. Bugs</h5> <p> For bug reporting we used the GitHub integrated issues. We resolved issues (bugs) by creating a new branch that contained the number of the issue, and merging once the bug was fixed. </p>  <h5>6. Building</h5> <p> The entire project was implemented using the electron module, and build using the electron-builder module. Look up <span class="section">Building</span> section. </p>  <h5>7. Refactoring</h5> <p> During the code-writing process we refactored under multiple circumstances. From class renaming, code beautifying, removing code duplicate, reordering code and splitting it into modules, adding comments etc. </p> <p> More about this and a few examples under the <span class="section">Refactoring</span> section </p>  <h5>8. Design Patterns</h5> <p> The design patterns we primary use are the Singleton and ------ patterns. More info and code snippets under the <span class="section">Patterns</span> section </p>',
+    'design':
+        '',
+    "uml":
+        '',
+    "testing":
+        '',
+    "building":
+        '',
+    "refactoring":
+        '',
+    "patterns":
+        ''
+}
+
+function select(event) {
+    // get the other to the basic:
+    for (div of document.querySelectorAll('.left div')) {
+        div.style.backgroundColor = ''
+        div.style.color = ''
+        div.style.boxShadow = ''
+    }
+    // keep this one highlighted:
+    event.target.style.backgroundColor = 'black'
+    event.target.style.color = 'white'
+    event.target.style.boxShadow = '1px white'
+    // 'load' the page
+    document.querySelector('.right').innerHTML = sections[event.target.id]
+}
+for (section of document.querySelectorAll('.left div')) {
+    console.log(section)
+    section.onclick = select
+}
+
+document.body.onclick = function(event) {
+    // get the other to the basic:
+    // if (event.target.parentNode.classList.contains('left') == false)
+    // for (div of document.querySelectorAll('.left div')) {
+    //     div.style.backgroundColor = ''
+    //     div.style.color = ''
+    //     div.style.boxShadow = ''
+    // }
+}
