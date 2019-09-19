@@ -1,0 +1,84 @@
+button#docs-button {
+    overflow-x: hidden;
+    width: 3%;
+    height: 3%;
+    border-radius: 300px;
+    position: fixed;
+    top: 1%;
+    left: 1%;
+    border: none;
+    padding: none;
+    /* background-color: white; */
+    font-weight: bold;
+    /* with image: */
+    background-color: #22bec4;
+    background-image: url('../icons/docs.png');
+    background-repeat: no-repeat;
+    background-size: 200% 200%;
+    background-position: 45%;
+    /*  */
+    box-shadow: inset 0px 0px 3px 0px black;
+}
+button#docs-button:hover {
+    transition: width 0.382s, background-color 0.191s;
+    width: 9%;
+    /* without image: */
+    /* TODO  keep the image as an icon :D */
+    background-color: white;
+    background-image: none;
+    /* background-repeat: no-repeat;
+    background-size: inherit;
+    background-position: 5% 5%; */
+    background-image: none;
+    /* background-color: cyan; */
+    /*  */
+    box-shadow: 0px 0px 6px 0px black;
+}
+button#docs-button div{
+    transition: display 0.618s;
+    display: none;
+}
+button#docs-button:hover div{
+    transition: display 0.618s;
+    display: inline-block;
+}
+
+
+
+
+button#settings-button {
+    overflow-x: hidden;
+    width: 3%;
+    height: 3%;
+    border-radius: 300px;
+    position: fixed;
+    top: 5%;
+    left: 1%;
+    border: none;
+    /* with image: */
+    background-color: #22bec4;
+    background-image: url('../icons/settings.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: 45%;
+    /*  */
+    font-weight: bold;
+    /*  */
+    box-shadow: inset 0px 0px 3px 0px black;
+}
+button#settings-button:hover {
+    transition: width 0.382s, background-color 0.191s;
+    width: 9%;
+    background-image: none;
+    background-color: white;
+    /*  */
+    box-shadow: 0px 0px 6px 0px black;
+}
+button#settings-button div{
+    transition: display 0.618s;
+    display: none;
+}
+button#settings-button:hover div{
+    transition: display 0.618s;
+    display: inline-block;
+}
