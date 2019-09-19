@@ -446,7 +446,7 @@ const AudioPlayer = (function() {
                     instance.interval = window.setInterval(
                         () => {
                             let section = Math.ceil(instance.audio.currentTime)
-                            audioScroll.style.width = `calc(${section / instance.sections} * 100%)`
+                            audioScroll.style.width = `calc(${section / instance.sections} * calc(100% - 30px))`
                             console.log("NOW")
                         }, 1000)
                 }, 1000)
