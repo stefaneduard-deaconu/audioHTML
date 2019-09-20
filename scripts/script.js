@@ -54,7 +54,6 @@ const SettingsClass = function(oldSettings) {
 var settingsObject = SettingsClass(
     JSON.parse(ipc.sendSync('send-settings'))
 )
-
 console.log(settingsObject)
 
 /*
@@ -95,8 +94,6 @@ const AudioButton = function(audioSource, label, id) {
     }
     return btn
 }
-
-
 
 // we follow a model:
 // ->  we won't have two identical named files with different labels!
@@ -180,7 +177,6 @@ var vueButtons = new Vue({
         btns: btns_data
     }
 })
-
 // after generating the buttons, we can add the tag references to them:
 // include the button tags for the NOW generated buttons:
 audioLibrary.getButtons().forEach((each) => {
@@ -192,62 +188,11 @@ for (button of audioLibrary.getButtons()) {
     let btn = Object.assign({}, button)
     btn.getTag().addEventListener('click', function() {
         audioPlayer.loadAudio(btn) // TODO add settings for this button!!!
-        audioPlayer.play()
     })
 }
 
-/*
-██████   █████   ██████  ███████     ██████  ████████ ███    ██ ███████
-██   ██ ██   ██ ██       ██          ██   ██    ██    ████   ██ ██
-██████  ███████ ██   ███ █████       ██████     ██    ██ ██  ██ ███████
-██      ██   ██ ██    ██ ██          ██   ██    ██    ██  ██ ██      ██  ██
-██      ██   ██  ██████  ███████     ██████     ██    ██   ████ ███████   █
-                                                                         █
-*/
-/*
-███████ ███████ ████████ ████████ ██ ███    ██  ██████  ███████
-██      ██         ██       ██    ██ ████   ██ ██       ██
-███████ █████      ██       ██    ██ ██ ██  ██ ██   ███ ███████
-     ██ ██         ██       ██    ██ ██  ██ ██ ██    ██      ██
-███████ ███████    ██       ██    ██ ██   ████  ██████  ███████
-*/
 
 
-
-console.log(settingsObject)
-
-function generateControls() {
-    let docsButton = document.createElement('button')
-    docsButton.innerHTML = '<div>Docs</div>'
-    docsButton.id = 'docs-button'
-    docsButton.onclick = function() {
-        if (docs.getShown() == false) {
-            docs.show()
-        } else {
-            docs.hide()
-        }
-    }
-
-    let settingsButton = document.createElement('button')
-    settingsButton.innerHTML = '<div>Settings</div>'
-    settingsButton.id = 'settings-button'
-    settingsButton.onclick = function() {
-        // if (settings.getShown() == false) {
-        //     settings.show()
-        // } else {
-        //     settings.hide()
-        // }
-    }
-
-    document.body.appendChild(docsButton)
-    document.body.appendChild(settingsButton)
-    let buttonsStylesheet = document.createElement('link')
-    buttonsStylesheet.rel = "stylesheet"
-    buttonsStylesheet.type = "text/css"
-    buttonsStylesheet.href = "./styles/buttons.css"
-    document.head.appendChild(buttonsStylesheet)
-}
-generateControls()
 
 /*
             ██ ███    ███  █████   ██████  ███████ ███████
@@ -386,6 +331,9 @@ const AudioPlayer = (function() {
             instance.currPresentation = imagesGallery.getPresentations()[button.getId()]
             imagesGallery.setImage(instance.currPresentation[0]) // at least one image per presentation
             instance.currImageId = 0
+            if (settingsObject.autoplay == true) {
+                instance.play()
+            }
         }
         instance.setSection = function(start, end) {
             // TODO
@@ -403,6 +351,7 @@ const AudioPlayer = (function() {
             } else {
                 // nothing, because it will just end very fast
                 // TODO  make it end right in this second :D
+                instance.stop()
             }
         }
         instance.volumeUp = function(percent) {
@@ -427,52 +376,57 @@ const AudioPlayer = (function() {
                 function() {
                     let sectionDuration = instance.audio.duration / instance.currPresentation.length
                     let imageId = Math.floor(instance.audio.currentTime / sectionDuration)
-                    console.log(imageId)
-                    console.log(instance.currImageId)
-                    if (imageId != instance.currImageId) {
-                        imagesGallery.setImage(instance.currPresentation[imageId])
-                        instance.currImageId = imageId
+                    if (imageId >= instance.currPresentation.length) {
+                        window.clearInterval(instance.presentationInterval)
+                    } else {
+                        if (imageId != instance.currImageId) {
+                            imagesGallery.setImage(instance.currPresentation[imageId])
+                            instance.currImageId = imageId
+                        }
                     }
-                }, 1000)
-            instance.audio.play()
-            // because nothing will happend before 2 seconds have passed
-            var audioScroll = document.getElementById('audio-scroll')
-            window.setTimeout(
-                () => {
-                    instance.sections = Math.ceil(instance.audio.duration)
-                    let section = Math.ceil(instance.audio.currentTime)
-                    audioScroll.style.width = `calc(${section / instance.sections} * 100%)`
-                    console.log("NOW")
-                    instance.interval = window.setInterval(
-                        () => {
-                            let section = Math.ceil(instance.audio.currentTime)
-                            audioScroll.style.width = `calc(${section / instance.sections} * 100%)`
-                            console.log("NOW")
-                        }, 1000)
-                }, 1000)
+            }, 1000)
+        instance.audio.play()
+        // because nothing will happend before 2 seconds have passed
+        var audioScroll = document.getElementById('audio-scroll')
+        window.setTimeout(
+            () => {
+                instance.sections = Math.ceil(instance.audio.duration)
+                let section = Math.ceil(instance.audio.currentTime)
+                audioScroll.style.width = `calc(${section / instance.sections} * calc(100% - 30px))`
+                instance.interval = window.setInterval(
+                    () => {
+                        let section = Math.ceil(instance.audio.currentTime)
+                        audioScroll.style.width = `calc(${section / instance.sections} * calc(100% - 30px))`
+                        console.log(section / instance.sections)
+                           if (section / instance.sections == 1) {
+                               window.clearInterval(instance.interval)
+                               instance.interval = null
+                           }
+                    }, 1000)
+            }, 1000)
 
-            // document.querySelector('audio').play()
-            document.querySelector('#audio-player').classList.add('active')
-            instance.isActive = true
-        }
-        instance.stop = function() {
-            window.clearInterval(instance.presentationInterval)
-            instance.audio.pause()
-            window.clearInterval(instance.interval)
-            document.querySelector('#audio-player').classList.remove('active')
-            instance.isActive = false
-            // set the currentTime according to the 3-seconds stuff
+        // document.querySelector('audio').play()
+        document.querySelector('#audio-player').classList.add('active')
+        instance.isActive = true
+    }
+    instance.stop = function() {
+        window.clearInterval(instance.presentationInterval)
+        instance.audio.pause()
+        window.clearInterval(instance.interval)
+        document.querySelector('#audio-player').classList.remove('active')
+        instance.isActive = false
+        // set the currentTime according to the 3-seconds stuff
+    }
+    return instance
+}
+return {
+    getInstance: function() {
+        if (!instance) {
+            instance = firstInstance()
         }
         return instance
     }
-    return {
-        getInstance: function() {
-            if (!instance) {
-                instance = firstInstance()
-            }
-            return instance
-        }
-    }
+}
 })()
 
 var audioPlayer = AudioPlayer.getInstance()
@@ -540,18 +494,18 @@ document.addEventListener('keydown', (event) => {
                 break
             case 'ArrowUp':
                 // if (audioPlayer.isActive == true) {
-                    percent = 0.01
-                    if (keydownTimer > 25)
-                        percent = 0.05
-                    audioPlayer.volumeUp(percent)
+                percent = 0.01
+                if (keydownTimer > 25)
+                    percent = 0.05
+                audioPlayer.volumeUp(percent)
                 // }
                 break
             case 'ArrowDown':
                 // if (audioPlayer.isActive == true) {
-                    percent = 0.01
-                    if (keydownTimer > 25)
-                        percent = 0.05
-                    audioPlayer.volumeDown(percent)
+                percent = 0.01
+                if (keydownTimer > 25)
+                    percent = 0.05
+                audioPlayer.volumeDown(percent)
                 // }
                 break
             case 'ArrowRight':
@@ -581,6 +535,76 @@ document.querySelector('#audio-player #section-start')
         (event) => {
 
         })
+
+
+
+/*
+███████ ███████ ████████ ████████ ██ ███    ██  ██████  ███████
+██      ██         ██       ██    ██ ████   ██ ██       ██
+███████ █████      ██       ██    ██ ██ ██  ██ ██   ███ ███████
+     ██ ██         ██       ██    ██ ██  ██ ██ ██    ██      ██
+███████ ███████    ██       ██    ██ ██   ████  ██████  ███████
+*/
+
+
+// generating and playing the active-button:
+vueAudioLabel = new Vue({
+    el: '#audio-label',
+    data: {
+        label: audioLibrary.getButtons()[settingsObject['active-button'].id].label
+    }
+})
+window.setTimeout(
+    function() {
+        audioPlayer.loadAudio(audioLibrary.getButtons()[settingsObject['active-button'].id])
+
+    }, 1000)
+
+/*
+██████   █████   ██████  ███████     ██████  ████████ ███    ██ ███████
+██   ██ ██   ██ ██       ██          ██   ██    ██    ████   ██ ██
+██████  ███████ ██   ███ █████       ██████     ██    ██ ██  ██ ███████
+██      ██   ██ ██    ██ ██          ██   ██    ██    ██  ██ ██      ██  ██
+██      ██   ██  ██████  ███████     ██████     ██    ██   ████ ███████   █
+                                                                         █
+*/
+
+
+
+console.log(settingsObject)
+
+function generateControls() {
+    let docsButton = document.createElement('button')
+    docsButton.innerHTML = '<div>Docs</div>'
+    docsButton.id = 'docs-button'
+    docsButton.onclick = function() {
+        if (docs.getShown() == false) {
+            docs.show()
+        } else {
+            docs.hide()
+        }
+    }
+
+    let settingsButton = document.createElement('button')
+    settingsButton.innerHTML = '<div>Settings</div>'
+    settingsButton.id = 'settings-button'
+    settingsButton.onclick = function() {
+        // if (settings.getShown() == false) {
+        //     settings.show()
+        // } else {
+        //     settings.hide()
+        // }
+    }
+
+    document.body.appendChild(docsButton)
+    document.body.appendChild(settingsButton)
+    let buttonsStylesheet = document.createElement('link')
+    buttonsStylesheet.rel = "stylesheet"
+    buttonsStylesheet.type = "text/css"
+    buttonsStylesheet.href = "./styles/buttons.css"
+    document.head.appendChild(buttonsStylesheet)
+}
+generateControls()
 
 /*
 ██████   ██████   ██████ ███████
