@@ -4,5 +4,6 @@
 
 dist/
 images/
+audios/
 
 node_modules/

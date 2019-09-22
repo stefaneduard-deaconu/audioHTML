@@ -48,7 +48,7 @@
 
 /* as to vertically align an img inside a div :) */
 /* This is below the audio button and above the gallery */
-#textDiv {
+#text-div {
 	height: 5%;
 	text-align: center;
 }
@@ -69,6 +69,7 @@ img {
 	width:90%;
 	height: calc(calc(85% - 225px) - 2px); /* the last 2px's for thesecond .row - the aknowledgements*/
 	padding: 5% 5%;
+	margin-top: 30px;
 	margin: auto; /* for margin-left and -right */
 	border: 1px solid grey;
 }
