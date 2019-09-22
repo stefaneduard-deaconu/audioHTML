@@ -346,6 +346,7 @@ const AudioPlayer = (function() {
             if (instance.audio.currentTime >= time) {
                 instance.audio.currentTime -= time
             } else {
+
                 // nothing, or show something red TODO TODO TODO
             }
         }
@@ -380,6 +381,7 @@ const AudioPlayer = (function() {
                 function() {
                     let sectionDuration = instance.audio.duration / instance.currPresentation.length
                     let imageId = Math.floor(instance.audio.currentTime / sectionDuration)
+
                     if (imageId >= instance.currPresentation.length) {
                         window.clearInterval(instance.presentationInterval)
                     } else {
@@ -412,6 +414,7 @@ const AudioPlayer = (function() {
         // document.querySelector('audio').play()
         document.querySelector('#audio-player').classList.add('active')
         instance.isActive = true
+
     }
     instance.stop = function() {
         window.clearInterval(instance.presentationInterval)
