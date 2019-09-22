@@ -49,12 +49,12 @@ describe("test-login-form", function() {
         }
     });
 
-    // describe("The buttons have the right labels", function() {
-    //     // wait for Electron window to open
-    //     app.on('ready', function(){
-    //
-    //     })
-    // });
+    describe("The buttons have the right labels", function() {
+        // wait for Electron window to open
+        app.on('ready', function(){
+
+        })
+    });
 });
 
 const app = initialiseSpectron();
