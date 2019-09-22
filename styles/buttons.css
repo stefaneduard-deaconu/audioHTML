@@ -20,6 +20,7 @@ button#docs-button {
     box-shadow: inset 0px 0px 3px 0px black;
 }
 button#docs-button:hover {
+    z-index: 99;
     transition: width 0.382s, background-color 0.191s;
     width: 9%;
     /* without image: */
@@ -67,6 +68,7 @@ button#settings-button {
     box-shadow: inset 0px 0px 3px 0px black;
 }
 button#settings-button:hover {
+    z-index: 99;
     transition: width 0.382s, background-color 0.191s;
     width: 9%;
     background-image: none;
