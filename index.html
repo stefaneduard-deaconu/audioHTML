@@ -6,29 +6,47 @@
 	</title>
 	<link rel="stylesheet" type="text/css" href="./styles/stylesheet.css">
 	<link rel="stylesheet" type="text/css" href="./styles/audioplayer.css">
+	<link rel="stylesheet" type="text/css" href="./styles/docs-board.css">
+	<link rel="stylesheet" type="text/css" href="./styles/text-div.css">
 </head>
 
 <body>
 	<div class="row">
 		<div class="left">
-			<div id="audioDiv">
+			<div id="audio-div">
 				<div id="audio-label">
-					<h2>This is the first label</h2>
+					<h2> {{ label }}</h2>
 				</div>
+				<audio src=""></audio>
 				<div id="audio-player">
 					<div id="audio-bar">
-						<div id="section-end"></div>
+						<div id="volume-button" class="tooltip">
+							<!-- <span class="tooltiptext">Volume</span> -->
+							<div id="volume-bar"></div>
+						</div>
+						<div id="play-button">
+							<div id="play">
+
+							</div>
+						</div>
+
+						<div id="section-start">
+							<div class="section-circle"></div>
+						</div>
 						<div id="audio-scroll"></div>
-						<div id="section-start"></div>
+						<div id="section-end">
+							<div class="section-circle"></div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div id="textDiv">
+			<div id="text-div">
 
 			</div>
 			<div id="pictureDiv">
 				<span class="alignHelper">
-				<img src="" />
+					<img src="images/_grey.jpg" style="position: absolute; top: 0px; left: -5%; min-width: 105%; min-height: 100%"/>
+				</span>
 			</div>
 		</div>
 		<div class="right">
@@ -40,6 +58,7 @@
 	</div>
 	<div class="row" style="font-family: sans-serif; ">
 		<div>
+			<!-- Imagine de <a href="https://pixabay.com/ro/users/PIRO4D-2707530/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1504364">PIRO4D</a> de la <a href="https://pixabay.com/ro/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1504364">Pixabay</a> -->
 			Icons made by
 			<b>Freepik (www.flaticon.com/authors/freepik)</b>
 			from
